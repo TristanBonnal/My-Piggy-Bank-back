@@ -9,23 +9,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Config\Security\PasswordHasherConfig;
 
 class ApiController extends AbstractController
 {
     /**
      * @Route("/api/signup", name="api", methods = {"POST"})
      */
-    public function index(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator ): Response
+    public function signUp(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $hasher ): Response
     {
         $data = $request->getContent();
         // dd($newUser);
         try {
             $newUser = $serializer->deserialize($data, User::class, "json");
+            $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
+            $newUser->setPassword($hashedPassword);
         } catch (Exception $e) {
-            return new JsonResponse("Données formulaires invalides", Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse("Données formulaire invalides", Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $errors = $validator->validate($newUser);
@@ -35,7 +40,6 @@ class ApiController extends AbstractController
 
             return new JsonResponse($errorsString);
         }
-
         $doctrine->persist($newUser);
         $doctrine->flush();
 
