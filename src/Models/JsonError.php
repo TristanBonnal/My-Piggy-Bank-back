@@ -20,7 +20,6 @@ class JsonError
     public function setValidationErrors(ConstraintViolationListInterface $violations)
     {
         foreach ($violations as $violation) {
-            // $this->message[] = "La valeur '" .$violation->getInvalidValue(). "' ne respecte pas les règles de validation de la propriété '". $violation->getPropertyPath() . "'";
             $this->messages[] = $violation->getPropertyPath() . ': ' .  $violation->getMessage();
         }
     }
