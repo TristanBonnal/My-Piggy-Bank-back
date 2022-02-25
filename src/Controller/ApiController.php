@@ -56,7 +56,7 @@ class ApiController extends AbstractController
      */
     public function showUser(User $user): Response
     {
-
+        dd($this->getUser());
         return $this->json(
             $user, 
             Response::HTTP_OK,
