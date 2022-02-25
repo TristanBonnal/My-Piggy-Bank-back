@@ -56,8 +56,8 @@ class ApiController extends AbstractController
      */
     public function showUser(User $user): Response
     {
-        dd($this->getUser());
-        // $this->denyAccessUnlessGranted('SHOW_USER', $user);
+        // dd($this->getUser());
+        $this->denyAccessUnlessGranted('SHOW_USER', $user);
         return $this->json(
             $user, 
             Response::HTTP_OK,

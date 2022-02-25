@@ -21,16 +21,15 @@ class UserVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        $user = $token->getUser();
+        $currentUser = $token->getUser();
         // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+        if (!$currentUser instanceof UserInterface) {
             return false;
         }
-        dd($user);
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'SHOW_USER':
-                return true;
+                return $currentUser == $subject;
                 break;
         }
 
