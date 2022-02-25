@@ -18,8 +18,9 @@ use Symfony\Config\Security\PasswordHasherConfig;
 
 class ApiController extends AbstractController
 {
+
     /**
-     * @Route("/api/signup", name="api", methods = {"POST"})
+     * @Route("/api/signup", name="api_signup", methods = {"POST"})
      */
     public function signUp(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $hasher ): Response
     {
@@ -47,6 +48,20 @@ class ApiController extends AbstractController
             $newUser, Response::HTTP_CREATED,
             [],
             ['groups' => ['add_user']]
+        );
+    }
+
+        /**
+     * @Route("/api/utilisateurs/{id}", name="api_show_user", methods = {"GET"})
+     */
+    public function showUser(User $user): Response
+    {
+
+        return $this->json(
+            $user, 
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['show_user']]
         );
     }
 }

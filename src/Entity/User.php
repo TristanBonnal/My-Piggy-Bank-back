@@ -27,6 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups ({"add_user"})
+     * @Groups ({"show_user"})
      * @Assert\Email()
      */
     private $email;
@@ -51,6 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups ({"add_user"})
+     * @Groups ({"show_user"})
      * @Assert\Length(
      *  min = 1,
      *  max = 60
@@ -61,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups ({"add_user"})
+     * @Groups ({"show_user"})
      * @Assert\Length(
      * min = 2,
      * max = 60)
