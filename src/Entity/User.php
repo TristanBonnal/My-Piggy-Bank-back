@@ -111,13 +111,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Unique
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Unique
      */
     private $bic;
 
