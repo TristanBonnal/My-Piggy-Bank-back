@@ -55,13 +55,11 @@ class ApiController extends AbstractController
      */
     public function showUser(User $user = null): Response
     {
-        if (!$user) {
-            return new JsonResponse("Cet utilisateur n'existe pas (identifiant erroné)", Response::HTTP_NOT_FOUND);
-        }
-
         try {
-            $this->denyAccessUnlessGranted('SHOW_USER', $user);
-
+            if (!$user) {
+                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)");
+            }
+            $this->denyAccessUnlessGranted('SHOW_USER', $user, 'Vous n\'avez pas les droits sur cette page');
         } catch (Exception $e) {
             return new JsonResponse("Vous n'avez pas les droits sur cette page", Response::HTTP_NOT_FOUND);
         }
