@@ -18,7 +18,7 @@ class Pot
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups ({"add_pot"})
-     * @Groups ({"show_pot"})
+     * @Groups ({"show_pot", "show_user"})
      */
     private $id;
 
