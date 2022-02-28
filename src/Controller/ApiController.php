@@ -51,7 +51,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/utilisateurs/{id}", name="api_show_user", methods = {"GET"})
+     * @Route("/api/users/{id}", name="api_show_user", methods = {"GET"})
      */
     public function showUser(User $user = null): Response
     {
@@ -71,6 +71,39 @@ class ApiController extends AbstractController
             Response::HTTP_OK,
             [],
             ['groups' => ['show_user']]
+        );
+    }
+
+    /**
+     * @Route ("/api/users/{id}", name="api_update_user", methods = {"PATCH"})
+     */
+    public function updateUser(User $user = null, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $doctrine, UserPasswordHasherInterface $hasher): Response 
+    {
+        $data = $request->getContent();
+        try {
+
+            $newUser = $serializer->deserialize($data, User::class, "json");
+            $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
+            $newUser->setPassword($hashedPassword);
+            dd($user, $newUser);
+        } catch (Exception $e) {
+            return new JsonResponse("Données formulaire invalides", Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $errors = $validator->validate($newUser);
+
+        if (count($errors) > 0) {
+            $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
+            $myJsonError->setValidationErrors($errors);
+            return $this->json($myJsonError, $myJsonError->getError());
+        }
+
+        $doctrine->flush();
+
+        return $this->json(
+            $newUser, Response::HTTP_CREATED,
+            [],
+            ['groups' => ['add_user']]
         );
     }
 }

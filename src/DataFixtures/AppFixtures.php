@@ -34,17 +34,12 @@ class AppFixtures extends Fixture
         // Admin
         $newAdmin = new User;
         $newAdmin
-            ->setEmail($faker->email())
+            ->setEmail('admin@admin.com')
             ->setRoles(['ROLE_ADMIN'])
             ->setPassword($this->hasher->hashPassword($newAdmin, 'admin'))
-            ->setUsername($faker->username())
             ->setFirstname($faker->firstName())
             ->setLastname($faker->lastName())
             ->setBirthDate($faker->dateTimeBetween('-100 years', '-18 years'))
-            ->setAddress($faker->streetaddress())
-            ->setCity($faker->city())
-            ->setZipCode((int)$faker->postcode())
-            ->setCountry("France")
             ->setPhone($faker->phoneNumber())
             ->setIban($faker->iban())
             ->setBic($faker->swiftBicNumber())
@@ -61,11 +56,6 @@ class AppFixtures extends Fixture
             $newUser->setPassword($this->hasher->hashPassword($newUser, 'user'));
             $newUser->setLastname($faker->lastName());
             $newUser->setBirthDate($faker->dateTimeBetween('-100 years', '-18 years'));
-            $newUser->setUsername($faker->username());
-            $newUser->setAddress($faker->streetaddress());
-            $newUser->setCity($faker->city());
-            $newUser->setZipCode((int)$faker->postcode());
-            $newUser->setCountry("France");
             $newUser->setPhone($faker->phoneNumber());
             $newUser->setIban($faker->iban());
             $newUser->setBic($faker->swiftBicNumber());
