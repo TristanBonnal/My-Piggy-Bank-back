@@ -10,7 +10,7 @@ class UserVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, ['SHOW_USER',])
+        return in_array($attribute, ['SHOW_USER','UPDATE_USER'])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -22,6 +22,9 @@ class UserVoter extends Voter
         }
         switch ($attribute) {
             case 'SHOW_USER':
+                return $currentUser == $subject;
+                break;
+            case 'UPDATE_USER' :
                 return $currentUser == $subject;
                 break;
         }

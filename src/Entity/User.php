@@ -21,6 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups ({"add_user"})
+     * @Groups ({"update_user"})
      */
     private $id;
 
@@ -28,6 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups ({"add_user"})
      * @Groups ({"show_user"})
+     * @Groups ({"update_user"})
      * @Assert\Email()
      */
     private $email;
@@ -43,14 +45,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank()
      */
     private $password;
+    
 
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups ({"add_user"})
      * @Groups ({"show_user"})
+     * @Groups ({"update_user"})
      * @Assert\Length(
-     *  min = 1,
+     *  min = 2,
      *  max = 60
      * )
      */
@@ -60,6 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups ({"add_user"})
      * @Groups ({"show_user"})
+     * @Groups ({"update_user"})
      * @Assert\Length(
      * min = 2,
      * max = 60)
@@ -68,6 +73,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups ({"update_user"})
      */
     private $birthDate;
 
@@ -78,27 +84,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ({"update_user"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ({"update_user"})
+     * @Assert\Iban()
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups ({"update_user"})
+     * @Assert\Bic
      */
     private $bic;
 
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
+     * @Groups ({"update_user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups ({"update_user"})
      */
     private $updatedAt;
 
@@ -261,7 +274,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->iban;
     }
 
-    public function setIban(string $iban): self
+    public function setIban(?string $iban): self
     {
         $this->iban = $iban;
 

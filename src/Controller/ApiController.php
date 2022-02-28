@@ -72,6 +72,7 @@ class ApiController extends AbstractController
             [],
             ['groups' => ['show_user']]
         );
+        
     }
 
     /**
@@ -79,19 +80,33 @@ class ApiController extends AbstractController
      */
     public function updateUser(User $user = null, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $doctrine, UserPasswordHasherInterface $hasher): Response 
     {
+        if (!$user) {
+            return new JsonResponse("Cet utilisateur n'existe pas (identifiant erroné)", Response::HTTP_NOT_FOUND);
+        }
         $data = $request->getContent();
         try {
-
-            $newUser = $serializer->deserialize($data, User::class, "json");
-            $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
-            $newUser->setPassword($hashedPassword);
-            dd($user, $newUser);
+            $this->denyAccessUnlessGranted('UPDATE_USER', $user);
+            $updatedUser = $serializer->deserialize($data, User::class, "json");
+            $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
+            $updatedUser->setPassword($hashedPassword);
         } catch (Exception $e) {
-            return new JsonResponse("Données formulaire invalides", Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+        $user
+            ->setPassword($updatedUser->getPassword())
+            ->setFirstname($updatedUser->getFirstName())
+            ->setLastname($updatedUser->getLastName())
+            ->setBirthDate($updatedUser->getBirthDate())
+            ->setPhone($updatedUser->getPhone())
+            ->setIban($updatedUser->getIban())
+            ->setBic($updatedUser->getBic())
+            ->setUpdatedAt(new \DateTime)
 
-        $errors = $validator->validate($newUser);
+        ;
 
+        
+        $errors = $validator->validate($user);
+        
         if (count($errors) > 0) {
             $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
             $myJsonError->setValidationErrors($errors);
@@ -101,9 +116,10 @@ class ApiController extends AbstractController
         $doctrine->flush();
 
         return $this->json(
-            $newUser, Response::HTTP_CREATED,
+            $user, Response::HTTP_CREATED,
             [],
-            ['groups' => ['add_user']]
+            ['groups' => ['update_user']]
         );
     }
 }
+            
