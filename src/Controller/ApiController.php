@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Pot;
 use App\Entity\User;
 use App\Models\JsonError;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,7 +30,7 @@ class ApiController extends AbstractController
             $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
             $newUser->setPassword($hashedPassword);
         } catch (Exception $e) {
-            return new JsonResponse("Données formulaire invalides", Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse($e->getMessage(), $e->getCode());
         }
 
         $errors = $validator->validate($newUser);
@@ -57,11 +58,11 @@ class ApiController extends AbstractController
     {
         try {
             if (!$user) {
-                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)");
+                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
             }
-            $this->denyAccessUnlessGranted('SHOW_USER', $user, 'Vous n\'avez pas les droits sur cette page');
+            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
         } catch (Exception $e) {
-            return new JsonResponse("Vous n'avez pas les droits sur cette page", Response::HTTP_NOT_FOUND);
+            return new JsonResponse($e->getMessage(), $e->getCode());
         }
 
         return $this->json(
@@ -81,14 +82,14 @@ class ApiController extends AbstractController
         $data = $request->getContent();
         try {
             if (!$user) {
-                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)");
+                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
             }
             $updatedUser = $serializer->deserialize($data, User::class, "json");
-            $this->denyAccessUnlessGranted('UPDATE_USER', $user, 'Vous n\'avez pas les droits sur cette page');
+            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
             $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
             $updatedUser->setPassword($hashedPassword);
         } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse($e->getMessage(), $e->getCode());
         }
         $user
             ->setPassword($updatedUser->getPassword())
@@ -117,6 +118,66 @@ class ApiController extends AbstractController
             [],
             ['groups' => ['update_user']]
         );
+    }
+
+    /**
+     * @Route("/api/users/{id}/pots", name="api_add_pot", methods = {"POST"})
+     */
+    public function addPot(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, User $user = null): Response
+    {
+        $data = $request->getContent();
+        try {
+            if (!$user) {
+                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
+            }
+            $newPot = $serializer->deserialize($data, Pot::class, "json");
+            $newPot->setUser($user);
+            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), $e->getCode());
+        }
+
+        $errors = $validator->validate($newPot);
+
+        if (count($errors) > 0) {
+            $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
+            $myJsonError->setValidationErrors($errors);
+            return $this->json($myJsonError, $myJsonError->getError());
+        }
+
+        $doctrine->persist($newPot);
+        $doctrine->flush();
+
+        return $this->json(
+            $newPot, Response::HTTP_CREATED,
+            [],
+            ['groups' => ['show_pot']]
+        );
+    }
+
+    /**
+     * @Route("/api/users/{id}/pots", name="api_pots", methods = {"GET"})
+     */
+    public function potsByUser(User $user = null): Response
+    {
+        try {
+            if (!$user) {
+                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
+            }
+            $pots = $user->getPots();
+            // dd($pots);
+            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(),$e->getCode());
+        }
+
+        return $this->json(
+            $pots, 
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['show_pot']]
+        );
+        
     }
 }
             

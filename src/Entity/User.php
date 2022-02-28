@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -22,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      * @Groups ({"add_user"})
      * @Groups ({"update_user"})
+     * @Groups ({"show_pot"})
      */
     private $id;
 
@@ -30,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups ({"add_user"})
      * @Groups ({"show_user"})
      * @Groups ({"update_user"})
+     * @Groups ({"show_pot"})
      * @Assert\Email()
      */
     private $email;
@@ -115,11 +119,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Pot::class, mappedBy="user")
+     * @Groups ({"show_user"})
+     */
+    private $pots;
+
     public function __construct ()
     {
         $this->roles[] = 'ROLE_USER';
         $this->createdAt = new \DateTime("now");
         $this->status = 1;
+        $this->pots = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -313,6 +324,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pot>
+     */
+    public function getPots(): Collection
+    {
+        return $this->pots;
+    }
+
+    public function addPot(Pot $pot): self
+    {
+        if (!$this->pots->contains($pot)) {
+            $this->pots[] = $pot;
+            $pot->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePot(Pot $pot): self
+    {
+        if ($this->pots->removeElement($pot)) {
+            // set the owning side to null (unless already changed)
+            if ($pot->getUser() === $this) {
+                $pot->setUser(null);
+            }
+        }
 
         return $this;
     }

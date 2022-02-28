@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * @ORM\Entity(repositoryClass=PotRepository::class)
  */
@@ -16,26 +17,35 @@ class Pot
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ({"add_pot"})
+     * @Groups ({"show_pot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups ({"add_pot"})
+     * @Groups ({"show_pot"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups ({"add_pot"})
+     * @Groups ({"show_pot"})
      */
     private $dateGoal;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups ({"add_pot"})
+     * @Groups ({"show_pot"})
      */
     private $amountGoal;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups ({"show_pot"})
      */
     private $createdAt;
 
@@ -43,6 +53,14 @@ class Pot
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="pots")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups ({"add_pot"})
+     * @Groups ({"show_pot"})
+     */
+    private $user;
 
     public function __construct ()
     {
@@ -110,6 +128,18 @@ class Pot
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

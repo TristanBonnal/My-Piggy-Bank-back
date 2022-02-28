@@ -10,8 +10,7 @@ class UserVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool
     {
-        return in_array($attribute, ['SHOW_USER','UPDATE_USER'])
-            && $subject instanceof \App\Entity\User;
+        return $attribute == 'USER' && $subject instanceof \App\Entity\User;
     }
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
@@ -21,10 +20,7 @@ class UserVoter extends Voter
             return false;
         }
         switch ($attribute) {
-            case 'SHOW_USER':
-                return $currentUser == $subject;
-                break;
-            case 'UPDATE_USER' :
+            case 'USER':
                 return $currentUser == $subject;
                 break;
         }
