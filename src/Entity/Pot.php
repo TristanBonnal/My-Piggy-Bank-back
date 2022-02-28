@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\PotRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PotRepository::class)
@@ -41,6 +43,11 @@ class Pot
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    public function __construct ()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {
