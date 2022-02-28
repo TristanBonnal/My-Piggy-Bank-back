@@ -80,13 +80,13 @@ class ApiController extends AbstractController
      */
     public function updateUser(User $user = null, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $doctrine, UserPasswordHasherInterface $hasher): Response 
     {
-        if (!$user) {
-            return new JsonResponse("Cet utilisateur n'existe pas (identifiant erroné)", Response::HTTP_NOT_FOUND);
-        }
         $data = $request->getContent();
         try {
-            $this->denyAccessUnlessGranted('UPDATE_USER', $user);
+            if (!$user) {
+                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)");
+            }
             $updatedUser = $serializer->deserialize($data, User::class, "json");
+            $this->denyAccessUnlessGranted('UPDATE_USER', $user, 'Vous n\'avez pas les droits sur cette page');
             $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
             $updatedUser->setPassword($hashedPassword);
         } catch (Exception $e) {
@@ -104,7 +104,6 @@ class ApiController extends AbstractController
 
         ;
 
-        
         $errors = $validator->validate($user);
         
         if (count($errors) > 0) {
