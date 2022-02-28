@@ -121,18 +121,14 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/users/{id}/pots", name="api_add_pot", methods = {"POST"})
+     * @Route("/api/pots", name="api_add_pot", methods = {"POST"})
      */
-    public function addPot(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, User $user = null): Response
+    public function addPot(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
     {
         $data = $request->getContent();
         try {
-            if (!$user) {
-                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
-            }
             $newPot = $serializer->deserialize($data, Pot::class, "json");
-            $newPot->setUser($user);
-            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
+            $newPot->setUser($this->getUser());
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
@@ -156,17 +152,12 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/users/{id}/pots", name="api_pots", methods = {"GET"})
+     * @Route("/api/pots", name="api_pots", methods = {"GET"})
      */
-    public function potsByUser(User $user = null): Response
+    public function potsByUser(): Response
     {
         try {
-            if (!$user) {
-                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
-            }
-            $pots = $user->getPots();
-            // dd($pots);
-            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
+            $pots = $this->getUser()->getPots();
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(),$e->getCode());
         }
