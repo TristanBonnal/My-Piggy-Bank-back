@@ -37,7 +37,7 @@ class Pot
     private $dateGoal;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      */
@@ -96,12 +96,12 @@ class Pot
         return $this;
     }
 
-    public function getAmountGoal(): ?\DateTimeInterface
+    public function getAmountGoal():?int
     {
         return $this->amountGoal;
     }
 
-    public function setAmountGoal(?\DateTimeInterface $amountGoal): self
+    public function setAmountGoal(?int $amountGoal): self
     {
         $this->amountGoal = $amountGoal;
 
