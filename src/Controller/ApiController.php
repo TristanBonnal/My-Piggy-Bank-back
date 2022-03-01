@@ -155,7 +155,29 @@ class ApiController extends AbstractController
             [],
             ['groups' => ['show_pot']]
         );
-        
     }
+
+    /**
+     * @Route("/api/pots/{id}", name="api_pots", methods = {"GET"})
+     */
+    public function showPot(Pot $pot = null): Response
+    {
+        try {
+            if (!$pot) {
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
+            }
+            $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), $e->getCode());
+        }
+
+        return $this->json(
+            $pot, 
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['show_pot']]
+        );
+    }
+
 }
             
