@@ -26,6 +26,7 @@ class Pot
      * @ORM\Column(type="string", length=255)
      * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
+     * @Groups ({"show_user"})
      */
     private $name;
 

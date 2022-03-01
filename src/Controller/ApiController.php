@@ -30,7 +30,7 @@ class ApiController extends AbstractController
             $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
             $newUser->setPassword($hashedPassword);
         } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), $e->getCode());
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $errors = $validator->validate($newUser);
@@ -56,14 +56,8 @@ class ApiController extends AbstractController
      */
     public function showUser(): Response
     {
+ 
         $user = $this->getUser();
-        try {
-            if (!$user) {
-                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
-            }
-        } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), $e->getCode());
-        }
 
         return $this->json(
             $user, Response::HTTP_OK,
@@ -74,21 +68,18 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route ("/api/users/{id}", name="api_update_user", methods = {"PATCH"})
+     * @Route ("/api/users", name="api_update_user", methods = {"PATCH"})
      */
     public function updateUser(User $user = null, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $doctrine, UserPasswordHasherInterface $hasher): Response 
     {
         $data = $request->getContent();
+        $user = $this->getUser();
         try {
-            if (!$user) {
-                throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
-            }
             $updatedUser = $serializer->deserialize($data, User::class, "json");
-            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
             $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
             $updatedUser->setPassword($hashedPassword);
         } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), $e->getCode());
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user
             ->setPassword($updatedUser->getPassword())
@@ -113,7 +104,7 @@ class ApiController extends AbstractController
         $doctrine->flush();
 
         return $this->json(
-            $user, Response::HTTP_CREATED,
+            $user, Response::HTTP_OK,
             [],
             ['groups' => ['update_user']]
         );
@@ -129,7 +120,7 @@ class ApiController extends AbstractController
             $newPot = $serializer->deserialize($data, Pot::class, "json");
             $newPot->setUser($this->getUser());
         } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), $e->getCode());
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $errors = $validator->validate($newPot);
@@ -155,11 +146,8 @@ class ApiController extends AbstractController
      */
     public function potsByUser(): Response
     {
-        try {
-            $pots = $this->getUser()->getPots();
-        } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(),$e->getCode());
-        }
+
+        $pots = $this->getUser()->getPots();
 
         return $this->json(
             $pots, 
