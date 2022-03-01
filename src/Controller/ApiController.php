@@ -158,7 +158,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/pots/{id}", name="api_pots", methods = {"GET"})
+     * @Route("/api/pots/{id}", name="api_show_pot", methods = {"GET"})
      */
     public function showPot(Pot $pot = null): Response
     {
