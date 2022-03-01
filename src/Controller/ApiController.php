@@ -179,5 +179,52 @@ class ApiController extends AbstractController
         );
     }
 
+    /**
+     * @Route("/api/pots/{id}", name="api_update_pot", methods = {"PATCH"})
+     */
+    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    {
+        $data = $request->getContent();
+        
+        try {
+            if (!$pot) {
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
+            }
+            $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), $e->getCode());
+        }
+
+        try {
+            $newPot = $serializer->deserialize($data, Pot::class, "json");
+            $newPot->setUser($this->getUser());
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $pot
+            ->setName($newPot->getName())
+            ->setDateGoal($newPot->getDateGoal())
+            ->setAmountGoal($newPot->getAmountGoal())
+            ->setUpdatedAt(new \DateTime)
+        ;
+        $errors = $validator->validate($newPot);
+
+        if (count($errors) > 0) {
+            $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
+            $myJsonError->setValidationErrors($errors);
+            return $this->json($myJsonError, $myJsonError->getError());
+        }
+
+        $doctrine->flush();    
+        
+        return $this->json(
+            $pot, 
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['show_pot']]
+        );
+    }
+
 }
             
