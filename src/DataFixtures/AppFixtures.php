@@ -79,7 +79,7 @@ class AppFixtures extends Fixture
 
             
 
-            for ($i = 0; $i < mt_rand(0,4); $i++) {
+            for ($j = 0; $j < mt_rand(0,4); $j++) {
                 $newPotUser = new Pot();
 
                 $newPotUser
