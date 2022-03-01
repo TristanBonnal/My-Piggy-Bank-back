@@ -52,15 +52,15 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/users/{id}", name="api_show_user", methods = {"GET"})
+     * @Route("/api/users", name="api_show_user", methods = {"GET"})
      */
-    public function showUser(User $user = null): Response
+    public function showUser(): Response
     {
+        $user = $this->getUser();
         try {
             if (!$user) {
                 throw new Exception("Cet utilisateur n'existe pas (identifiant erroné)", 404);
             }
-            $this->denyAccessUnlessGranted('USER', $user, 'Vous n\'avez pas les droits sur cette page');
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
