@@ -66,8 +66,7 @@ class ApiController extends AbstractController
         }
 
         return $this->json(
-            $user, 
-            Response::HTTP_OK,
+            $user, Response::HTTP_OK,
             [],
             ['groups' => ['show_user']]
         );
