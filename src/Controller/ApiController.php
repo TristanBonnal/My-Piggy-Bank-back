@@ -270,12 +270,12 @@ class ApiController extends AbstractController
         return $this->json(
             $newOperation, Response::HTTP_CREATED,
             [],
-            ['groups' => ['add_operation']]
+            ['groups' => ['show_operation']]
         );
     }
 
     /**
-     * @Route("/api/pots/{id}/operations", name="api_show_operations", methods = {"GET"})
+     * @Route("/api/pots/{id}/operations", name="api_show_operations_by_pot", methods = {"GET"})
      */
     public function showOperations(Pot $pot = null): Response
     {
@@ -292,7 +292,7 @@ class ApiController extends AbstractController
             $pot->getOperations(), 
             Response::HTTP_OK,
             [],
-            ['groups' => ['show_pot_operations']]
+            ['groups' => ['show_operation']]
         );
     }
 

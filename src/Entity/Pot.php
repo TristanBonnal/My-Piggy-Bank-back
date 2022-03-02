@@ -29,7 +29,7 @@ class Pot
      * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      * @Groups ({"show_user"})
-     * @Groups ({"show_pot_operations"})
+     * @Groups ({"show_operation"})
      * @Assert\NotBlank()
      */
     private $name;
@@ -38,6 +38,7 @@ class Pot
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
+     * @Groups ({"show_operation"})
      */
     private $dateGoal;
 
@@ -45,12 +46,14 @@ class Pot
      * @ORM\Column(type="integer", nullable=true)
      * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
+     * @Groups ({"show_operation"})
      */
     private $amountGoal;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups ({"show_pot"})
+     * @Groups ({"show_operation"})
      */
     private $createdAt;
 
