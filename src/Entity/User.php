@@ -125,12 +125,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $pots;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="user")
+     */
+    private $operations;
+
     public function __construct ()
     {
         $this->roles[] = 'ROLE_USER';
         $this->createdAt = new \DateTime("now");
         $this->status = 1;
         $this->pots = new ArrayCollection();
+        $this->operations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -352,6 +358,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($pot->getUser() === $this) {
                 $pot->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Operation>
+     */
+    public function getOperations(): Collection
+    {
+        return $this->operations;
+    }
+
+    public function addOperation(Operation $operation): self
+    {
+        if (!$this->operations->contains($operation)) {
+            $this->operations[] = $operation;
+            $operation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(Operation $operation): self
+    {
+        if ($this->operations->removeElement($operation)) {
+            // set the owning side to null (unless already changed)
+            if ($operation->getUser() === $this) {
+                $operation->setUser(null);
             }
         }
 

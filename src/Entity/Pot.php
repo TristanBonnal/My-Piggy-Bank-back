@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PotRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -64,9 +66,15 @@ class Pot
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="pot")
+     */
+    private $operations;
+
     public function __construct ()
     {
         $this->createdAt = new \DateTime();
+        $this->operations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -142,6 +150,36 @@ class Pot
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Operation>
+     */
+    public function getOperations(): Collection
+    {
+        return $this->operations;
+    }
+
+    public function addOperation(Operation $operation): self
+    {
+        if (!$this->operations->contains($operation)) {
+            $this->operations[] = $operation;
+            $operation->setPot($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(Operation $operation): self
+    {
+        if ($this->operations->removeElement($operation)) {
+            // set the owning side to null (unless already changed)
+            if ($operation->getPot() === $this) {
+                $operation->setPot(null);
+            }
+        }
 
         return $this;
     }
