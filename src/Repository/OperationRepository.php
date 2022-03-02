@@ -19,32 +19,20 @@ class OperationRepository extends ServiceEntityRepository
         parent::__construct($registry, Operation::class);
     }
 
-    // /**
-    //  * @return Operation[] Returns an array of Operation objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Operation[] Returns an array of Operation objects
+     */
+    
+    public function getOperationsByPot($potId)
     {
         return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('o.pot = :val')
+            ->setParameter('val', $potId)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
 
-    /*
-    public function findOneBySomeField($value): ?Operation
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
 }

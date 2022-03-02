@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\OperationRepository;
 use App\Repository\PotRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -75,12 +76,18 @@ class Pot
      */
     private $operations;
 
+    /**
+     * Undocumented variable
+     *@Groups ({"show_pot"})
+     * @var float
+     */
     private $amount;
 
-    public function __construct ()
+    public function __construct (OperationRepository $operationRepository)
     {
         $this->createdAt = new \DateTime();
         $this->operations = new ArrayCollection();
+        $this->operationRepository = $operationRepository;
     }
 
     public function getId(): ?int
@@ -190,8 +197,27 @@ class Pot
         return $this;
     }
 
+    /**
+     * Get *@Groups ({"show_pot"})
+     *
+     * @return  float
+     */ 
     public function getAmount()
     {
-        //récupérer toutes les opérations liées à cette cagnotte
+        return $this->amount;
+    }
+
+    /**
+     * Set *@Groups ({"show_pot"})
+     *
+     * @param  float  $amount  *@Groups ({"show_pot"})
+     *
+     * @return  self
+     */ 
+    public function setAmount(float $amount)
+    {
+        $this->amount = $amount;
+
+        return $this;
     }
 }

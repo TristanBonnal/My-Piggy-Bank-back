@@ -6,6 +6,7 @@ use App\Entity\Operation;
 use App\Entity\Pot;
 use App\Entity\User;
 use App\Models\JsonError;
+use App\Repository\OperationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -161,7 +162,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/pots/{id}", name="api_show_pot", methods = {"GET"})
      */
-    public function showPot(Pot $pot = null): Response
+    public function showPot(Pot $pot = null, OperationRepository $operationRepository): Response
     {
         try {
             if (!$pot) {
@@ -171,6 +172,15 @@ class ApiController extends AbstractController
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
+
+        //Récupération des opérations 
+        //TODO : à mettre dans un service
+        $operations = $operationRepository->getOperationsByPot($pot->getId());
+        $total = 0;
+        foreach ($operations as $operation) {
+            $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
+        }
+        $pot->setAmount($total);
 
         return $this->json(
             $pot, 
@@ -186,7 +196,7 @@ class ApiController extends AbstractController
     public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
     {
         $data = $request->getContent();
-        
+
         try {
             if (!$pot) {
                 throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
