@@ -4,12 +4,20 @@ namespace App\Entity;
 
 use App\Repository\OperationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=OperationRepository::class)
  */
 class Operation
 {
+
+    public function __construct ()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -19,28 +27,42 @@ class Operation
 
     /**
      * @ORM\Column(type="boolean", options = {"default" : true})
+     * @Groups ({"show_operation"})
+     * @Groups ({"add_operation"})
+     * @Groups ({"show_pot_operations"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="integer", options = {"unsigned" : true})
+     * @Groups ({"show_operation"})
+     * @Groups ({"add_operation"})
+     * @Groups ({"show_pot_operations"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups ({"show_operation"})
+     * @Groups ({"add_operation"})
+     * @Groups ({"show_pot_operations"})
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Pot::class, inversedBy="operations")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups ({"add_operation"})
+     * @Groups ({"show_operation"})
+     * @Groups ({"show_pot_operations"})
      */
     private $pot;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="operations")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups ({"add_operation"})
+     * @Groups ({"show_operation"})
      */
     private $user;
 

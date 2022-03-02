@@ -29,6 +29,7 @@ class Pot
      * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      * @Groups ({"show_user"})
+     * @Groups ({"show_pot_operations"})
      * @Assert\NotBlank()
      */
     private $name;

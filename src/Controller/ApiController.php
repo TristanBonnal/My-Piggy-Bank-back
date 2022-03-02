@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Operation;
 use App\Entity\Pot;
 use App\Entity\User;
 use App\Models\JsonError;
@@ -223,6 +224,75 @@ class ApiController extends AbstractController
             Response::HTTP_OK,
             [],
             ['groups' => ['show_pot']]
+        );
+    }
+
+    /**
+     * @Route("/api/operations", name="api_show_operations", methods = {"GET"})
+     */
+    public function showOperation(): Response
+    {
+
+        $operations = $this->getUser()->getOperations();
+
+        return $this->json(
+            $operations, Response::HTTP_OK,
+            [],
+            ['groups' => ['show_operation']]
+        );
+       
+    }
+
+    /**
+     * @Route("/api/operations", name="api_add_operation", methods = {"POST"})
+     */
+    public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    {
+        $data = $request->getContent();
+        try {
+            $newOperation = $serializer->deserialize($data, Operation::class, "json");
+            $newOperation->setUser($this->getUser());
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $errors = $validator->validate($newOperation);
+
+        if (count($errors) > 0) {
+            $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
+            $myJsonError->setValidationErrors($errors);
+            return $this->json($myJsonError, $myJsonError->getError());
+        }
+
+        $doctrine->persist($newOperation);
+        $doctrine->flush();
+
+        return $this->json(
+            $newOperation, Response::HTTP_CREATED,
+            [],
+            ['groups' => ['add_operation']]
+        );
+    }
+
+    /**
+     * @Route("/api/pots/{id}/operations", name="api_show_operations", methods = {"GET"})
+     */
+    public function showOperations(Pot $pot = null): Response
+    {
+        try {
+            if (!$pot) {
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
+            }
+            $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), $e->getCode());
+        }
+
+        return $this->json(
+            $pot->getOperations(), 
+            Response::HTTP_OK,
+            [],
+            ['groups' => ['show_pot_operations']]
         );
     }
 
