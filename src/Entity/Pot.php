@@ -75,6 +75,8 @@ class Pot
      */
     private $operations;
 
+    private $amount;
+
     public function __construct ()
     {
         $this->createdAt = new \DateTime();
@@ -186,5 +188,10 @@ class Pot
         }
 
         return $this;
+    }
+
+    public function getAmount()
+    {
+        //récupérer toutes les opérations liées à cette cagnotte
     }
 }
