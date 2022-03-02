@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Operation;
 use App\Entity\User;
 use App\Entity\Pot;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -24,6 +25,7 @@ class AppFixtures extends Fixture
         $this->connexion->executeQuery('SET foreign_key_checks = 0');
         $this->connexion->executeQuery('TRUNCATE TABLE user');
         $this->connexion->executeQuery('TRUNCATE TABLE pot');
+        $this->connexion->executeQuery('TRUNCATE TABLE operation');
     }
 
     public function load(ObjectManager $manager): void
@@ -32,6 +34,10 @@ class AppFixtures extends Fixture
         $this->truncate();
 
         $faker = Factory::create('fr_FR');
+
+
+        $numberTinyInt = [0,1];
+
 
         // Admin
         $newAdmin = new User;
@@ -45,10 +51,12 @@ class AppFixtures extends Fixture
             ->setPhone($faker->phoneNumber())
             ->setIban($faker->iban())
             ->setBic($faker->swiftBicNumber())
-            ->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'));
+            ->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'))
+
         ;
         $numberOrNull = [null, $faker->numberBetween(100, 10000)];
         $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
+        
         $newPotAdmin = new Pot();
         $newPotAdmin
             ->setName('Voyage')
@@ -58,8 +66,20 @@ class AppFixtures extends Fixture
         $manager->persist($newPotAdmin);
         $newAdmin->addPot($newPotAdmin);
 
+        // Opérations Admin
+
+        $newOperationAdmin = new Operation();
+        $newOperationAdmin->setType(array_rand($numberTinyInt));
+        $newOperationAdmin->setAmount($faker->numberBetween(1,10000));
+        $newAdmin->addOperation($newOperationAdmin);
+        $newPotAdmin->addOperation($newOperationAdmin);
+
+        $manager->persist($newOperationAdmin);
+
+    
         $manager->persist($newAdmin);
-        
+
+
         //  User
         for ($i = 1; $i <= 4; $i++) {
 
@@ -77,9 +97,10 @@ class AppFixtures extends Fixture
             $newUser->setBic($faker->swiftBicNumber());
             $newUser->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'));
 
-            
 
-            for ($j = 0; $j < mt_rand(0,4); $j++) {
+            
+            for ($j = 0; $j < mt_rand(0,8); $j++) {
+
                 $newPotUser = new Pot();
 
                 $newPotUser
@@ -87,13 +108,27 @@ class AppFixtures extends Fixture
                     ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                     ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
                 ;
+
                 $manager->persist($newPotUser);
                 $newUser->addPot($newPotUser);
                 
             }
             
+            // Opérations User
+
+            $newOperation = new Operation();
+            $newOperation->setType(array_rand($numberTinyInt));
+            $newOperation->setAmount($faker->numberBetween(1,10000));
+            $newUser->addOperation($newOperation);
+            $newPotUser->addOperation($newOperation);
+
+
+            $manager->persist($newOperation);
+
+            
             $manager->persist($newUser);
         }
+
 
         $manager->flush();
     }
