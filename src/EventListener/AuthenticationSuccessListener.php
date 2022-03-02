@@ -30,6 +30,14 @@ public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $even
         'email' => $user->getEmail(),
         'firstname' => $user->getFirstname(),
         'lastname' => $user->getLastname(),
+        'password' => $user->getPassword(),
+        'birthDate' => $user->getBirthDate(),
+        'status' => $user->getStatus(),
+        'phone' => $user->getPhone(),
+        'iban' => $user->getIban(),
+        'bic' => $user->getBic(),
+        'createdAt' => $user->getCreatedAt(),
+        'updatedAt' => $user->getUpdatedAt()
 
     ];
 
