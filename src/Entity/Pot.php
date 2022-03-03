@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\OperationRepository;
 use App\Repository\PotRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -74,6 +75,13 @@ class Pot
      * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="pot")
      */
     private $operations;
+
+    /**
+     * Undocumented variable
+     *@Groups ({"show_pot"})
+     * @var float
+     */
+    private $amount;
 
     public function __construct ()
     {
@@ -184,6 +192,30 @@ class Pot
                 $operation->setPot(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Get *@Groups ({"show_pot"})
+     *
+     * @return  float
+     */ 
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Set *@Groups ({"show_pot"})
+     *
+     * @param  float  $amount  *@Groups ({"show_pot"})
+     *
+     * @return  self
+     */ 
+    public function setAmount(float $amount)
+    {
+        $this->amount = $amount;
 
         return $this;
     }
