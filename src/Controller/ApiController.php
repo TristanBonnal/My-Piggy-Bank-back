@@ -243,7 +243,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/operations", name="api_add_operation", methods = {"POST"})
      */
-    public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
     {
         //Deserialisation 
         $data = $request->getContent();
@@ -255,10 +255,16 @@ class ApiController extends AbstractController
         }
 
         //Vérification de la cagnotte associée à l'opération
+        $pot = $newOperation->getPot();
         try {
-            if (!$newOperation->getPot()) {
+            if (!$pot) {
                 throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
             }
+            //Vérification du solde de la cagnotte en cas de retrait
+            if (!$newOperation->getType() && ($newOperation->getAmount() > $calculator->calculateAmount($pot))) {
+                throw new Exception('Retrait supérieur au montant de la cagnotte :(', Response::HTTP_BAD_REQUEST);
+            }
+
             $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
@@ -271,7 +277,6 @@ class ApiController extends AbstractController
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
-
 
         $doctrine->persist($newOperation);
         $doctrine->flush();

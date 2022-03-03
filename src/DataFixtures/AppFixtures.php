@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Operation;
 use App\Entity\User;
 use App\Entity\Pot;
+use App\Service\TotalCalculator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
@@ -14,10 +15,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AppFixtures extends Fixture
 {
 
-    public function __construct (UserPasswordHasherInterface $hasher, Connection $connexion)
+    public function __construct (UserPasswordHasherInterface $hasher, Connection $connexion, TotalCalculator $calculator)
     {
         $this->hasher = $hasher;
         $this->connexion = $connexion;
+        $this->calculator = $calculator;
     }
 
     public function truncate ()
@@ -52,8 +54,8 @@ class AppFixtures extends Fixture
         ;
         $numberOrNull = [null, $faker->numberBetween(100, 10000)];
         $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
-
-        for ($i = 0; $i < mt_rand(0,8); $i++) {
+        $rndIndex =  mt_rand(2,4);
+        for ($i = 0; $i < $rndIndex; $i++) {
             $newPotAdmin = new Pot();
             $newPotAdmin
                 ->setName('Voyage')
@@ -64,22 +66,26 @@ class AppFixtures extends Fixture
             $newAdmin->addPot($newPotAdmin);
 
             // Opérations Admin
-
-            for($j = 1; $j < mt_rand(1,5); $j++) {
-
+            $adminOperations = [];
+            $rndJndex =  mt_rand(2,6);
+            for($j = 0; $j < $rndJndex; $j++) {
 
                 $newOperationAdmin = new Operation();
                 $newOperationAdmin->setType(mt_rand(0,1));
                 $newOperationAdmin->setAmount($faker->numberBetween(1,10000));
+
+                //Vérification du solde de la cagnotte en cas de retrait
+                if (!$newOperationAdmin->getType() && ($newOperationAdmin->getAmount() > $this->calculator->calculateOperations($adminOperations))) {
+                    continue;
+                }
                 $newAdmin->addOperation($newOperationAdmin);
                 $newPotAdmin->addOperation($newOperationAdmin);
-
                 $manager->persist($newOperationAdmin);
+                $adminOperations[] = $newOperationAdmin;
 
             }
         }
         
-    
         $manager->persist($newAdmin);
 
 
@@ -101,11 +107,9 @@ class AppFixtures extends Fixture
             $newUser->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'));
 
 
-            
-            for ($j = 0; $j < mt_rand(0,8); $j++) {
-
+            $rndJndex = mt_rand(0,4);
+            for ($j = 0; $j < $rndJndex; $j++) {
                 $newPotUser = new Pot();
-
                 $newPotUser
                     ->setName($faker->word(1, true))
                     ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
@@ -115,20 +119,24 @@ class AppFixtures extends Fixture
                 $manager->persist($newPotUser);
                 $newUser->addPot($newPotUser);
 
-
                 // Opérations User
-                for ($k = 1; $k < mt_rand(1,5); $k++) {
+                $userOperations = [];
+                $rndK =  mt_rand(1,5);
+                for ($k = 1; $k <  $rndK; $k++) {
                     $newOperation = new Operation();
                     $newOperation->setType(mt_rand(0,1));
                     $newOperation->setAmount($faker->numberBetween(1,10000));
+
+                    //Vérification du solde de la cagnotte en cas de retrait
+                    if (!$newOperation->getType() && ($newOperation->getAmount() > $this->calculator->calculateOperations($userOperations))) {
+                        continue;
+                    }
                     $newUser->addOperation($newOperation);
                     $newPotUser->addOperation($newOperation);
                     $manager->persist($newOperation);
+                    $userOperations[] = $newOperation;
                 }
-                
             }
-            
-
             $manager->persist($newUser);
         }
 
