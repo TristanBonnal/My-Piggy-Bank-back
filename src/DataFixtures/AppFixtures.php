@@ -63,18 +63,18 @@ class AppFixtures extends Fixture
             $manager->persist($newPotAdmin);
             $newAdmin->addPot($newPotAdmin);
 
-        // Opérations Admin
+            // Opérations Admin
 
-        for($j = 1; $j < mt_rand(1,5); $j++) {
+            for($j = 1; $j < mt_rand(1,5); $j++) {
 
 
-        $newOperationAdmin = new Operation();
-        $newOperationAdmin->setType(mt_rand(0,1));
-        $newOperationAdmin->setAmount($faker->numberBetween(1,10000));
-        $newAdmin->addOperation($newOperationAdmin);
-        $newPotAdmin->addOperation($newOperationAdmin);
+                $newOperationAdmin = new Operation();
+                $newOperationAdmin->setType(mt_rand(0,1));
+                $newOperationAdmin->setAmount($faker->numberBetween(1,10000));
+                $newAdmin->addOperation($newOperationAdmin);
+                $newPotAdmin->addOperation($newOperationAdmin);
 
-        $manager->persist($newOperationAdmin);
+                $manager->persist($newOperationAdmin);
 
             }
         }
