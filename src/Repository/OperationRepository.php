@@ -23,11 +23,11 @@ class OperationRepository extends ServiceEntityRepository
      * @return Operation[] Returns an array of Operation objects
      */
     
-    public function getOperationsByPot($potId)
+    public function getOperationsByPot($pot)
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.pot = :val')
-            ->setParameter('val', $potId)
+            ->setParameter('val', $pot)
             ->getQuery()
             ->getResult()
         ;

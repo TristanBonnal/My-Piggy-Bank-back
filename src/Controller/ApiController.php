@@ -7,6 +7,7 @@ use App\Entity\Pot;
 use App\Entity\User;
 use App\Models\JsonError;
 use App\Repository\OperationRepository;
+use App\Service\TotalCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -162,7 +163,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/pots/{id}", name="api_show_pot", methods = {"GET"})
      */
-    public function showPot(Pot $pot = null, OperationRepository $operationRepository): Response
+    public function showPot(Pot $pot = null, TotalCalculator $calculator): Response
     {
         try {
             if (!$pot) {
@@ -173,14 +174,8 @@ class ApiController extends AbstractController
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
 
-        //Récupération des opérations 
-        //TODO : à mettre dans un service
-        $operations = $operationRepository->getOperationsByPot($pot->getId());
-        $total = 0;
-        foreach ($operations as $operation) {
-            $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
-        }
-        $pot->setAmount($total);
+        //Récupération du total des opérations d'une cagnotte
+        $calculator->calculateAmount($pot);
 
         return $this->json(
             $pot, 
