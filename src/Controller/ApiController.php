@@ -59,15 +59,12 @@ class ApiController extends AbstractController
      */
     public function showUser(): Response
     {
- 
-        $user = $this->getUser();
-
         return $this->json(
-            $user, Response::HTTP_OK,
+            $this->getUser(), 
+            Response::HTTP_OK,
             [],
             ['groups' => ['show_user']]
         );
-        
     }
 
     /**
@@ -93,7 +90,6 @@ class ApiController extends AbstractController
             ->setIban($updatedUser->getIban())
             ->setBic($updatedUser->getBic())
             ->setUpdatedAt(new \DateTime)
-
         ;
 
         $errors = $validator->validate($user);
@@ -145,15 +141,14 @@ class ApiController extends AbstractController
     }
 
     /**
+     * Retourne les cagnottes liées à un utilisateur
+     * 
      * @Route("/api/pots", name="api_pots", methods = {"GET"})
      */
     public function potsByUser(): Response
     {
-
-        $pots = $this->getUser()->getPots();
-
         return $this->json(
-            $pots, 
+            $this->getUser()->getPots(), 
             Response::HTTP_OK,
             [],
             ['groups' => ['show_pot']]
@@ -167,7 +162,7 @@ class ApiController extends AbstractController
     {
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
             }
             $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
@@ -194,7 +189,7 @@ class ApiController extends AbstractController
 
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
             }
             $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
@@ -237,15 +232,12 @@ class ApiController extends AbstractController
      */
     public function showOperation(): Response
     {
-
-        $operations = $this->getUser()->getOperations();
-
         return $this->json(
-            $operations, Response::HTTP_OK,
+            $this->getUser()->getOperations(), 
+            Response::HTTP_OK,
             [],
             ['groups' => ['show_operation']]
         );
-       
     }
 
     /**
@@ -253,6 +245,7 @@ class ApiController extends AbstractController
      */
     public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
     {
+        //Deserialisation 
         $data = $request->getContent();
         try {
             $newOperation = $serializer->deserialize($data, Operation::class, "json");
@@ -261,13 +254,24 @@ class ApiController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $errors = $validator->validate($newOperation);
+        //Vérification de la cagnotte associée à l'opération
+        try {
+            if (!$newOperation->getPot()) {
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
+            }
+            $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+        } catch (Exception $e) {
+            return new JsonResponse($e->getMessage(), $e->getCode());
+        }
 
+        //Vérification des données du formulaire
+        $errors = $validator->validate($newOperation);
         if (count($errors) > 0) {
             $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
+
 
         $doctrine->persist($newOperation);
         $doctrine->flush();
@@ -286,7 +290,7 @@ class ApiController extends AbstractController
     {
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', 404);
+                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
             }
             $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
