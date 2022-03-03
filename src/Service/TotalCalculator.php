@@ -12,7 +12,7 @@ class TotalCalculator
     }
 
     /**
-     * Récupère les opérations liée à une cagnotte et renvoie leur total
+     * Récupère les opérations liées à une cagnotte et renvoie leur total
      *
      * @param Pot $pot
      * @return void

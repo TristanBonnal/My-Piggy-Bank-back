@@ -83,11 +83,10 @@ class Pot
      */
     private $amount;
 
-    public function __construct (OperationRepository $operationRepository)
+    public function __construct ()
     {
         $this->createdAt = new \DateTime();
         $this->operations = new ArrayCollection();
-        $this->operationRepository = $operationRepository;
     }
 
     public function getId(): ?int
