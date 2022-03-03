@@ -35,10 +35,6 @@ class AppFixtures extends Fixture
 
         $faker = Factory::create('fr_FR');
 
-
-        $numberTinyInt = [0,1];
-
-
         // Admin
         $newAdmin = new User;
         $newAdmin
@@ -69,7 +65,7 @@ class AppFixtures extends Fixture
         // Opérations Admin
 
         $newOperationAdmin = new Operation();
-        $newOperationAdmin->setType(array_rand($numberTinyInt));
+        $newOperationAdmin->setType(mt_rand(0,1));
         $newOperationAdmin->setAmount($faker->numberBetween(1,10000));
         $newAdmin->addOperation($newOperationAdmin);
         $newPotAdmin->addOperation($newOperationAdmin);
@@ -111,21 +107,21 @@ class AppFixtures extends Fixture
 
                 $manager->persist($newPotUser);
                 $newUser->addPot($newPotUser);
+
+
+                // Opérations User
+                for ($k = 1; $k < mt_rand(1,5); $k++) {
+                    $newOperation = new Operation();
+                    $newOperation->setType(mt_rand(0,1));
+                    $newOperation->setAmount($faker->numberBetween(1,10000));
+                    $newUser->addOperation($newOperation);
+                    $newPotUser->addOperation($newOperation);
+                    $manager->persist($newOperation);
+                }
                 
             }
             
-            // Opérations User
 
-            $newOperation = new Operation();
-            $newOperation->setType(array_rand($numberTinyInt));
-            $newOperation->setAmount($faker->numberBetween(1,10000));
-            $newUser->addOperation($newOperation);
-            $newPotUser->addOperation($newOperation);
-
-
-            $manager->persist($newOperation);
-
-            
             $manager->persist($newUser);
         }
 
