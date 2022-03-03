@@ -121,4 +121,12 @@ class Operation
 
         return $this;
     }
+
+    public function __toString()
+    {
+        $type = $this->getType() ? "Dépôt" : "Retrait";
+        $amount = $this->getAmount();
+
+        return "Votre " . $type . " numéro : " . $this->getId() . " est d'un montant de " . $amount . " euros.";
+    }
 }

@@ -261,6 +261,7 @@ class ApiController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+
         $errors = $validator->validate($newOperation);
 
         if (count($errors) > 0) {

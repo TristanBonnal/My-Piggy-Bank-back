@@ -89,6 +89,7 @@ class Pot
         $this->operations = new ArrayCollection();
     }
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -218,5 +219,10 @@ class Pot
         $this->amount = $amount;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
