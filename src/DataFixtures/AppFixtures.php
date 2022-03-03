@@ -52,17 +52,21 @@ class AppFixtures extends Fixture
         ;
         $numberOrNull = [null, $faker->numberBetween(100, 10000)];
         $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
-        
-        $newPotAdmin = new Pot();
-        $newPotAdmin
-            ->setName('Voyage')
-            ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
-            ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
-        ;
-        $manager->persist($newPotAdmin);
-        $newAdmin->addPot($newPotAdmin);
+
+        for ($i = 0; $i < mt_rand(0,8); $i++) {
+            $newPotAdmin = new Pot();
+            $newPotAdmin
+                ->setName('Voyage')
+                ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
+                ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
+            ;
+            $manager->persist($newPotAdmin);
+            $newAdmin->addPot($newPotAdmin);
 
         // Opérations Admin
+
+        for($j = 1; $j < mt_rand(1,5); $j++) {
+
 
         $newOperationAdmin = new Operation();
         $newOperationAdmin->setType(mt_rand(0,1));
@@ -72,6 +76,9 @@ class AppFixtures extends Fixture
 
         $manager->persist($newOperationAdmin);
 
+            }
+        }
+        
     
         $manager->persist($newAdmin);
 
