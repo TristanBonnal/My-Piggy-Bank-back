@@ -20,14 +20,12 @@ class Pot
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups ({"add_pot"})
      * @Groups ({"show_pot", "show_user"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      * @Groups ({"show_user"})
      * @Groups ({"show_operation"})
@@ -37,7 +35,6 @@ class Pot
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      * @Groups ({"show_operation"})
      */
@@ -45,7 +42,6 @@ class Pot
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      * @Groups ({"show_operation"})
      */
@@ -66,7 +62,6 @@ class Pot
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="pots")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups ({"add_pot"})
      * @Groups ({"show_pot"})
      */
     private $user;

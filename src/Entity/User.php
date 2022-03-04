@@ -22,17 +22,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups ({"add_user"})
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      * @Groups ({"show_pot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups ({"add_user"})
      * @Groups ({"show_user"})
-     * @Groups ({"update_user"})
      * @Groups ({"show_pot"})
      * @Assert\Email()
      */
@@ -54,9 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups ({"add_user"})
      * @Groups ({"show_user"})
-     * @Groups ({"update_user"})
      * @Assert\Length(
      *  min = 2,
      *  max = 60
@@ -66,9 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups ({"add_user"})
      * @Groups ({"show_user"})
-     * @Groups ({"update_user"})
      * @Assert\Length(
      * min = 2,
      * max = 60)
@@ -77,7 +70,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups ({"update_user"})
      */
     private $birthDate;
 
@@ -88,20 +80,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      * @Assert\Iban()
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      * @Assert\Bic
      */
     private $bic;
@@ -109,13 +101,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      */
     private $updatedAt;
 
