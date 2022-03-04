@@ -28,12 +28,17 @@ class Operation
     /**
      * @ORM\Column(type="boolean", options = {"default" : true})
      * @Groups ({"show_operation"})
+     * @Assert\NotNull()
      */
     private $type;
 
     /**
      * @ORM\Column(type="integer", options = {"unsigned" : true})
      * @Groups ({"show_operation"})
+     * @Assert\NotBlank()
+     * @Assert\GreaterThan(
+     *     value = 0
+     * )
      */
     private $amount;
 
@@ -47,6 +52,7 @@ class Operation
      * @ORM\ManyToOne(targetEntity=Pot::class, inversedBy="operations")
      * @ORM\JoinColumn(nullable=false)
      * @Groups ({"show_operation"})
+     * @Assert\NotBlank()
      */
     private $pot;
 
@@ -129,4 +135,5 @@ class Operation
 
         return "Votre " . $type . " numéro : " . $this->getId() . " est d'un montant de " . $amount . " euros.";
     }
+
 }

@@ -26,5 +26,21 @@ class TotalCalculator
             $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
         }
         $pot->setAmount($total);
+        return $pot->getAmount();
+    }
+
+    /**
+     * Calcule le total des montants d'un tableau d'opérations, idéal pour les fixtures
+     * 
+     * @param array $operations non persistées
+     * @return float
+     */
+    public function calculateOperations(array $operations):float
+    {
+        $total = 0;
+        foreach ($operations as $operation) {
+            $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
+        }
+        return $total;
     }
 }
