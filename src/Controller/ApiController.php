@@ -50,7 +50,7 @@ class ApiController extends AbstractController
         return $this->json(
             $newUser, Response::HTTP_CREATED,
             [],
-            ['groups' => ['add_user']]
+            ['groups' => ['show_user']]
         );
     }
 
@@ -105,7 +105,7 @@ class ApiController extends AbstractController
         return $this->json(
             $user, Response::HTTP_OK,
             [],
-            ['groups' => ['update_user']]
+            ['groups' => ['show_user']]
         );
     }
 
