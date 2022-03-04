@@ -52,13 +52,13 @@ class AppFixtures extends Fixture
             ->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'))
 
         ;
-        $numberOrNull = [null, $faker->numberBetween(100, 10000)];
-        $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
         $rndIndex =  mt_rand(2,4);
         for ($i = 0; $i < $rndIndex; $i++) {
+            $numberOrNull = [null, $faker->numberBetween(100, 10000)];
+            $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
             $newPotAdmin = new Pot();
             $newPotAdmin
-                ->setName('Voyage')
+                ->setName($faker->word(1, true))
                 ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                 ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
             ;
