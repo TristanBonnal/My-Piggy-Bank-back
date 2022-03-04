@@ -90,7 +90,11 @@ class AppFixtures extends Fixture
 
 
         //  User
-        for ($i = 1; $i <= 4; $i++) 
+        for ($i = 1; $i <= 4; $i++) {
+
+            $numberOrNull = [null, $faker->numberBetween(100, 10000)];
+            $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
+
             $newUser = new User();
             $newUser->setEmail($faker->email());
             $newUser->setFirstname($faker->firstName());
@@ -102,11 +106,8 @@ class AppFixtures extends Fixture
             $newUser->setBic($faker->swiftBicNumber());
             $newUser->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'));
 
-
             $rndJndex = mt_rand(0,4);
             for ($j = 0; $j < $rndJndex; $j++) {
-                $numberOrNull = [null, $faker->numberBetween(100, 10000)];
-                $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
                 $newPotUser = new Pot();
                 $newPotUser
                     ->setName($faker->word(1, true))
