@@ -31,6 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups ({"show_user"})
      * @Groups ({"show_pot"})
+     * @Groups ({"show_operation"})
      * @Assert\Email()
      */
     private $email;
@@ -52,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups ({"show_user"})
+     * @Groups ({"show_operation"})
      * @Assert\Length(
      *  min = 2,
      *  max = 60
@@ -62,6 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups ({"show_user"})
+     * @Groups ({"show_operation"})
      * @Assert\Length(
      * min = 2,
      * max = 60)
@@ -94,6 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups ({"show_user"})
+     * @Groups ({"show_operation"})
      * @Assert\Bic
      */
     private $bic;
@@ -102,6 +106,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
      * @Groups ({"show_user"})
+     * @Groups ({"show_operation"})
      */
     private $createdAt;
 
