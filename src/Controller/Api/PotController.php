@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Pot;
 use App\Models\JsonError;
 use App\Service\TotalCalculator;
+use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

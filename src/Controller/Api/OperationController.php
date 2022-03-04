@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Operation;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Pot;
 use App\Models\JsonError;
 use App\Service\TotalCalculator;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class OperationController extends AbstractController
 {
-        /**
+    /**
      * @Route("/api/operations", name="api_show_operations", methods = {"GET"})
      */
     public function showOperation(): Response
