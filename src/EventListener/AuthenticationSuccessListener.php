@@ -29,6 +29,7 @@ public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $even
         'id' => $user->getId(),
         'email' => $user->getEmail(),
         'firstname' => $user->getFirstname(),
+        'roles' => $user->getRoles(),
         'lastname' => $user->getLastname(),
         'password' => $user->getPassword(),
         'birthDate' => $user->getBirthDate(),

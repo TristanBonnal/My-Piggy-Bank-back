@@ -254,6 +254,9 @@ class ApiController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+
+        $errors = $validator->validate($newOperation);
+
         //Vérification de la cagnotte associée à l'opération
         $pot = $newOperation->getPot();
         try {
@@ -264,6 +267,7 @@ class ApiController extends AbstractController
             if (!$newOperation->getType() && ($newOperation->getAmount() > $calculator->calculateAmount($pot))) {
                 throw new Exception('Retrait supérieur au montant de la cagnotte :(', Response::HTTP_BAD_REQUEST);
             }
+
 
             $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
