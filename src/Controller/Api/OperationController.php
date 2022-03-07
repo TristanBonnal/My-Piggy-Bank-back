@@ -19,9 +19,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class OperationController extends AbstractController
 {
     /**
+     * Récupère les opérations (retrait ou dépots) liées à l'utilisateur authentifié
+     *
+     * @return Response
+     * 
      * @Route("/api/operations", name="api_show_operations", methods = {"GET"})
      */
-    public function showOperation(): Response
+    public function showOperations(): Response
     {
         return $this->json(
             $this->getUser()->getOperations(), 
@@ -32,6 +36,10 @@ class OperationController extends AbstractController
     }
 
     /**
+     * Ajoute une opération (type=true pour dépot, sinon retrait)
+     * 
+     * @return Response
+     * 
      * @Route("/api/operations", name="api_add_operation", methods = {"POST"})
      */
     public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
@@ -84,10 +92,15 @@ class OperationController extends AbstractController
     }
 
     /**
+     * Récupère les opérations liée à une cagnotte (tout en vérifiant l'utilisateur)
+     * 
+     * @return Response
+     * 
      * @Route("/api/pots/{id}/operations", name="api_show_operations_by_pot", methods = {"GET"})
      */
-    public function showOperations(Pot $pot = null): Response
+    public function showPotOperations(Pot $pot = null): Response
     {
+        // Vérification de la cagnotte et de l'utilisateur
         try {
             if (!$pot) {
                 throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
