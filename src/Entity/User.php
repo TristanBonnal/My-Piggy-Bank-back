@@ -22,18 +22,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups ({"add_user"})
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      * @Groups ({"show_pot"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups ({"add_user"})
      * @Groups ({"show_user"})
-     * @Groups ({"update_user"})
      * @Groups ({"show_pot"})
+     * @Groups ({"show_operation"})
      * @Assert\Email()
      */
     private $email;
@@ -54,9 +52,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups ({"add_user"})
      * @Groups ({"show_user"})
-     * @Groups ({"update_user"})
+     * @Groups ({"show_operation"})
      * @Assert\Length(
      *  min = 2,
      *  max = 60
@@ -66,9 +63,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups ({"add_user"})
      * @Groups ({"show_user"})
-     * @Groups ({"update_user"})
+     * @Groups ({"show_operation"})
      * @Assert\Length(
      * min = 2,
      * max = 60)
@@ -77,7 +73,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups ({"update_user"})
      */
     private $birthDate;
 
@@ -88,20 +83,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      * @Assert\Iban()
      */
     private $iban;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
+     * @Groups ({"show_operation"})
      * @Assert\Bic
      */
     private $bic;
@@ -109,13 +105,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank()
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
+     * @Groups ({"show_operation"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups ({"update_user"})
+     * @Groups ({"show_user"})
      */
     private $updatedAt;
 
@@ -125,13 +122,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $pots;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="user")
+     */
+    private $operations;
+
     public function __construct ()
     {
         $this->roles[] = 'ROLE_USER';
         $this->createdAt = new \DateTime("now");
         $this->status = 1;
         $this->pots = new ArrayCollection();
+        $this->operations = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -356,6 +360,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Operation>
+     */
+    public function getOperations(): Collection
+    {
+        return $this->operations;
+    }
+
+    public function addOperation(Operation $operation): self
+    {
+        if (!$this->operations->contains($operation)) {
+            $this->operations[] = $operation;
+            $operation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperation(Operation $operation): self
+    {
+        if ($this->operations->removeElement($operation)) {
+            // set the owning side to null (unless already changed)
+            if ($operation->getUser() === $this) {
+                $operation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getFirstname().' '. $this->getLastname();
     }
 
 }
