@@ -79,7 +79,7 @@ class UserController extends AbstractController
 
     /**
      * Modification de ses données utilisateur
-     * 
+     * @param User $user utilisateur
      * @return Response
      *
      * @Route ("/api/users", name="api_update_user", methods = {"PATCH"})
@@ -98,7 +98,6 @@ class UserController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user
-            // @ts-ignore
             ->setPassword($updatedUser->getPassword())
             ->setFirstname($updatedUser->getFirstName())
             ->setLastname($updatedUser->getLastName())

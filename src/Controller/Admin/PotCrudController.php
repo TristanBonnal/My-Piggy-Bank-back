@@ -17,7 +17,7 @@ class PotCrudController extends AbstractCrudController
         return Pot::class;
     }
 
-    
+    // On configure les champs
     public function configureFields(string $pageName): iterable
     {
         return [

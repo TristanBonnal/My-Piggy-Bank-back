@@ -17,7 +17,7 @@ class OperationCrudController extends AbstractCrudController
         return Operation::class;
     }
 
-    
+    // On configure les champs
     public function configureFields(string $pageName): iterable
     {
         return [

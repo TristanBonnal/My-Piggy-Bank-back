@@ -6,6 +6,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Vérification de l'utilisateur courant
+ */
 class UserVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool

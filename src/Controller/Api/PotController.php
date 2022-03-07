@@ -74,6 +74,7 @@ class PotController extends AbstractController
      * Récupère une cagnotte tout en vérifiant l'utilisateur associé
      * 
      * @return mixed
+     * @param Pot $pot cagnotte correspondant au paramètre dynamique
      * 
      * @Route("/api/pots/{id}", name="api_show_pot", methods = {"GET"})
      */
@@ -105,6 +106,7 @@ class PotController extends AbstractController
      * Permet de modifier une cagnotte déja existante
      * 
      * @return response
+     * @param Pot $pot cagnotte correspondant au paramètre dynamique
      *
      * @Route("/api/pots/{id}", name="api_update_pot", methods = {"PATCH"})
      */

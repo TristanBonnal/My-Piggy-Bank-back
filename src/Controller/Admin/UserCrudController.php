@@ -20,7 +20,7 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    
+    // On configure les champs
     public function configureFields(string $pageName): iterable
     {
         return [

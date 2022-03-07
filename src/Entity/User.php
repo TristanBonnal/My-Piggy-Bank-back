@@ -127,6 +127,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $operations;
 
+    /**
+     * Lorsque qu'un user est créé, il aura le ROLE_USER par défaut, son statut sera à 1 (actif) et la date du jour sera associée à la propriété ceatedAt
+     */
     public function __construct ()
     {
         $this->roles[] = 'ROLE_USER';
@@ -392,6 +395,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // Retourne le nom et le prénom en chaîne de caractères
     public function __toString()
     {
         return $this->getFirstname().' '. $this->getLastname();

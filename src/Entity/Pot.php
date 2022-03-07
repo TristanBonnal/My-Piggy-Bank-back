@@ -78,6 +78,7 @@ class Pot
      */
     private $amount;
 
+    // La date du jour sera automatique associée à la propriété createdAt
     public function __construct ()
     {
         $this->createdAt = new \DateTime();
@@ -216,6 +217,7 @@ class Pot
         return $this;
     }
 
+     // Retourne le nom de la cagnotte en chaîne de caractères
     public function __toString()
     {
         return $this->getName();

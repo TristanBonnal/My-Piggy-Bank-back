@@ -38,6 +38,7 @@ class OperationController extends AbstractController
     /**
      * Ajoute une opération (type=true pour dépot, sinon retrait)
      * 
+     * @param TotalCalculator $calculator Calcule le montant d'une cagnotte
      * @return Response
      * 
      * @Route("/api/operations", name="api_add_operation", methods = {"POST"})
@@ -94,6 +95,7 @@ class OperationController extends AbstractController
     /**
      * Récupère les opérations liée à une cagnotte (tout en vérifiant l'utilisateur)
      * 
+     * @param Pot $pot Cagnotte sur laquelle les opérations sont récupérées
      * @return Response
      * 
      * @Route("/api/pots/{id}/operations", name="api_show_operations_by_pot", methods = {"GET"})
