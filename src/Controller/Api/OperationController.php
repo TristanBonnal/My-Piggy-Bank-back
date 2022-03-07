@@ -44,7 +44,7 @@ class OperationController extends AbstractController
      */
     public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
     {
-        //Deserialisation 
+        // Deserialisation du contenu du formulaire 
         $data = $request->getContent();
         try {
             $newOperation = $serializer->deserialize($data, Operation::class, "json");
