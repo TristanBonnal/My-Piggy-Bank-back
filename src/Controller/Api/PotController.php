@@ -106,21 +106,29 @@ class PotController extends AbstractController
     }
 
     /**
+     * 
+     * Permet de modifier une cagnotte déja existante
+     * 
+     * @return response
+     *
      * @Route("/api/pots/{id}", name="api_update_pot", methods = {"PATCH"})
      */
     public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
     {
         $data = $request->getContent();
 
+        // Si la cagnotte n'existe pas, on renvoie une erreur
         try {
             if (!$pot) {
                 throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
             }
+        // Seul le créateur de la cagnotte a accès à celle-ci
             $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
 
+        // On récupère les informations du formulaire et on désérialize, sinon erreur
         try {
             $newPot = $serializer->deserialize($data, Pot::class, "json");
             $newPot->setUser($this->getUser());
@@ -134,6 +142,8 @@ class PotController extends AbstractController
             ->setAmountGoal($newPot->getAmountGoal())
             ->setUpdatedAt(new \DateTime)
         ;
+
+        // Vérification des données du formulaire
         $errors = $validator->validate($newPot);
 
         if (count($errors) > 0) {

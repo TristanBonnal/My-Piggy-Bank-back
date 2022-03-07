@@ -17,12 +17,20 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends AbstractController
 {
+
     /**
+     * 
+     * Permet à un visiteur de s'inscrire via un formulaire
+     * 
+     * @return Response
+     *
      * @Route("/api/signup", name="api_signup", methods = {"POST"})
      */
     public function signUp(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $hasher ): Response
     {
         $data = $request->getContent();
+
+        // Deserialisation du contenu du formulaire et hashage du password
         try {
             $newUser = $serializer->deserialize($data, User::class, "json");
             $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
@@ -31,6 +39,7 @@ class UserController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        // Vérification des données du formulaire
         $errors = $validator->validate($newUser);
 
         if (count($errors) > 0) {
@@ -42,6 +51,8 @@ class UserController extends AbstractController
         $doctrine->persist($newUser);
         $doctrine->flush();
 
+        // On retourne un code de création, et les informations de l'utilisateur créé en JSON,
+
         return $this->json(
             $newUser, Response::HTTP_CREATED,
             [],
@@ -50,6 +61,10 @@ class UserController extends AbstractController
     }
 
     /**
+     * Retourne les utilisateurs
+     *
+     * @return Response
+     *
      * @Route("/api/users", name="api_show_user", methods = {"GET"})
      */
     public function showUser(): Response
@@ -63,12 +78,18 @@ class UserController extends AbstractController
     }
 
     /**
+     * Modification de ses données utilisateur
+     * 
+     * @return Response
+     *
      * @Route ("/api/users", name="api_update_user", methods = {"PATCH"})
      */
     public function updateUser(User $user = null, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $doctrine, UserPasswordHasherInterface $hasher): Response 
     {
         $data = $request->getContent();
         $user = $this->getUser();
+
+        // Deserialisation du contenu du formulaire
         try {
             $updatedUser = $serializer->deserialize($data, User::class, "json");
             $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
@@ -88,6 +109,7 @@ class UserController extends AbstractController
             ->setUpdatedAt(new \DateTime)
         ;
 
+        // Vérification des données du formulaire
         $errors = $validator->validate($user);
         
         if (count($errors) > 0) {
