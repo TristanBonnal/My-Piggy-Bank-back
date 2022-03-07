@@ -53,10 +53,15 @@ class PotController extends AbstractController
      * 
      * @Route("/api/pots", name="api_pots", methods = {"GET"})
      */
-    public function potsByUser(): Response
+    public function potsByUser(TotalCalculator $calculator): Response
     {
+        $pots = $this->getUser()->getPots();
+        foreach ($pots as $pot) {
+            //Récupération du total des opérations d'une cagnotte
+            $calculator->calculateAmount($pot);
+        }
         return $this->json(
-            $this->getUser()->getPots(), 
+            $pots, 
             Response::HTTP_OK,
             [],
             ['groups' => ['show_pot']]
