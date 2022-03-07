@@ -52,9 +52,9 @@ class AppFixtures extends Fixture
             ->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'))
 
         ;
-        $rndIndex =  mt_rand(2,4);
+        $rndIndex =  mt_rand(3,8);
         for ($i = 0; $i < $rndIndex; $i++) {
-            $numberOrNull = [null, $faker->numberBetween(100, 10000)];
+            $numberOrNull = [null, $faker->numberBetween(5000, 10000), $faker->numberBetween(5000, 10000)];
             $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
             $newPotAdmin = new Pot();
             $newPotAdmin
@@ -72,7 +72,7 @@ class AppFixtures extends Fixture
 
                 $newOperationAdmin = new Operation();
                 $newOperationAdmin->setType(mt_rand(0,1));
-                $newOperationAdmin->setAmount($faker->numberBetween(1,10000));
+                $newOperationAdmin->setAmount($faker->numberBetween(100,1000));
 
                 //Vérification du solde de la cagnotte en cas de retrait
                 if (!$newOperationAdmin->getType() && ($newOperationAdmin->getAmount() > $this->calculator->calculateOperations($adminOperations))) {
@@ -104,7 +104,7 @@ class AppFixtures extends Fixture
 
             $rndJndex = mt_rand(0,4);
             for ($j = 0; $j < $rndJndex; $j++) {
-                $numberOrNull = [null, $faker->numberBetween(100, 10000)];
+                $numberOrNull = [null, $faker->numberBetween(5000, 10000)];
                 $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
                 $newPotUser = new Pot();
                 $newPotUser
@@ -122,7 +122,7 @@ class AppFixtures extends Fixture
                 for ($k = 1; $k <  $rndK; $k++) {
                     $newOperation = new Operation();
                     $newOperation->setType(mt_rand(0,1));
-                    $newOperation->setAmount($faker->numberBetween(1,10000));
+                    $newOperation->setAmount($faker->numberBetween(100,1000));
 
                     //Vérification du solde de la cagnotte en cas de retrait
                     if (!$newOperation->getType() && ($newOperation->getAmount() > $this->calculator->calculateOperations($userOperations))) {
