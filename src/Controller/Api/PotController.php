@@ -18,10 +18,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PotController extends AbstractController
 {
     /**
+     * Ajoute une cagnotte via un formulaire
+     * 
+     * @return Response
+     * 
      * @Route("/api/pots", name="api_add_pot", methods = {"POST"})
      */
     public function addPot(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
     {
+        // Deserialisation du contenu du formulaire
         $data = $request->getContent();
         try {
             $newPot = $serializer->deserialize($data, Pot::class, "json");
@@ -30,8 +35,8 @@ class PotController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        // Vérification des données formualaire
         $errors = $validator->validate($newPot);
-
         if (count($errors) > 0) {
             $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
             $myJsonError->setValidationErrors($errors);
@@ -51,6 +56,8 @@ class PotController extends AbstractController
     /**
      * Retourne les cagnottes liées à un utilisateur
      * 
+     * @return Response
+     * 
      * @Route("/api/pots", name="api_pots", methods = {"GET"})
      */
     public function potsByUser(): Response
@@ -64,10 +71,15 @@ class PotController extends AbstractController
     }
 
     /**
+     * Récupère une cagnotte tout en vérifiant l'utilisateur associé
+     * 
+     * @return mixed
+     * 
      * @Route("/api/pots/{id}", name="api_show_pot", methods = {"GET"})
      */
     public function showPot(Pot $pot = null, TotalCalculator $calculator): Response
     {
+        // Vérification de la cagnotte et de l'utilisateur
         try {
             if (!$pot) {
                 throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
