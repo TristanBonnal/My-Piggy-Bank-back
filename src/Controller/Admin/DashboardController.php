@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractDashboardController
 {
     /**
+     * On retourne le bon template qui sera l'accueil du Dashboard
+     * 
      * @Route("/admin", name="admin")
      */
     public function index(): Response
@@ -27,6 +29,7 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('My Piggy Bank Back');
     }
 
+    // On configure ce qu'on veut de disponible dans le Dashboard afin de gérer le CRUD
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');

@@ -5,9 +5,11 @@ namespace App\Models;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
+/**
+ * Gestion personnalisées des erreurs Json
+ */
 class JsonError
 {
-
     private $error;
     private $messages;
     

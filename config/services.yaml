@@ -10,6 +10,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # ajout d'un listenner sur le login autorisé (voir EventListener)
     acme_api.event.authentication_success_listener:
             class: App\EventListener\AuthenticationSuccessListener
             tags:

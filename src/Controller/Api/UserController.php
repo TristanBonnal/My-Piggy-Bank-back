@@ -79,7 +79,7 @@ class UserController extends AbstractController
 
     /**
      * Modification de ses données utilisateur
-     * 
+     * @param User $user utilisateur
      * @return Response
      *
      * @Route ("/api/users", name="api_update_user", methods = {"PATCH"})

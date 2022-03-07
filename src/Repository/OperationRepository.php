@@ -20,6 +20,8 @@ class OperationRepository extends ServiceEntityRepository
     }
 
     /**
+     * Filtre les opérations par cagnotte, utile pour calculer le montant total de la cagnotte
+     * 
      * @return Operation[] Returns an array of Operation objects
      */
     

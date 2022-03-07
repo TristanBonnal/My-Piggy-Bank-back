@@ -15,6 +15,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * Généré par make:auth
+ * sérise l'accéès au back office uniquement 
+ */
 class AdminAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;

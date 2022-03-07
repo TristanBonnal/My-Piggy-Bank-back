@@ -22,6 +22,9 @@ class AppFixtures extends Fixture
         $this->calculator = $calculator;
     }
 
+    /**
+     * Permet de reset les id au chargement de nouvelles fixtures
+     */
     public function truncate ()
     {
         $this->connexion->executeQuery('SET foreign_key_checks = 0');
@@ -34,10 +37,10 @@ class AppFixtures extends Fixture
     {
 
         $this->truncate();
-
+        // Bundle externe permettant la génération de données aléatoires
         $faker = Factory::create('fr_FR');
 
-        // Admin
+        // Création d'un admin
         $newAdmin = new User;
         $newAdmin
             ->setEmail('admin@admin.com')
@@ -52,7 +55,8 @@ class AppFixtures extends Fixture
             ->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'))
 
         ;
-        $rndIndex =  mt_rand(3,8);
+        // Création de cagnottes
+        $rndIndex =  mt_rand(2,4);
         for ($i = 0; $i < $rndIndex; $i++) {
             $numberOrNull = [null, $faker->numberBetween(5000, 10000), $faker->numberBetween(5000, 10000)];
             $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
@@ -65,7 +69,7 @@ class AppFixtures extends Fixture
             $manager->persist($newPotAdmin);
             $newAdmin->addPot($newPotAdmin);
 
-            // Opérations Admin
+            // Opérations pour chaque cagnotte admin
             $adminOperations = [];
             $rndJndex =  mt_rand(2,6);
             for($j = 0; $j < $rndJndex; $j++) {
@@ -89,7 +93,7 @@ class AppFixtures extends Fixture
         $manager->persist($newAdmin);
 
 
-        //  User
+        //  Création users
         for ($i = 1; $i <= 4; $i++) {
             $newUser = new User();
             $newUser->setEmail($faker->email());
@@ -101,7 +105,8 @@ class AppFixtures extends Fixture
             $newUser->setIban($faker->iban());
             $newUser->setBic($faker->swiftBicNumber());
             $newUser->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'));
-
+            
+            // Cagnottes users
             $rndJndex = mt_rand(0,4);
             for ($j = 0; $j < $rndJndex; $j++) {
                 $numberOrNull = [null, $faker->numberBetween(5000, 10000)];

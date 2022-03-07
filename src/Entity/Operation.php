@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Operation
 {
 
+    // La date du jour sera automatique associée à la propriété createdAt
     public function __construct ()
     {
         $this->createdAt = new \DateTime();
@@ -128,6 +129,7 @@ class Operation
         return $this;
     }
 
+    // On définit le type, on met en variable le montant, on concatène et on retourne le tout en string
     public function __toString()
     {
         $type = $this->getType() ? "Dépôt" : "Retrait";
