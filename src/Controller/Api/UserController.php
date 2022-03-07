@@ -98,7 +98,6 @@ class UserController extends AbstractController
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user
-            // @ts-ignore
             ->setPassword($updatedUser->getPassword())
             ->setFirstname($updatedUser->getFirstName())
             ->setLastname($updatedUser->getLastName())
