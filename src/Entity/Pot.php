@@ -80,6 +80,7 @@ class Pot
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups ({"show_pot"})
      * @Assert\NotNull()
      * @Assert\Range(min=0, max=2)
      */
