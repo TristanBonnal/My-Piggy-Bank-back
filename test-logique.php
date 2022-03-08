@@ -2,7 +2,7 @@
 1 = Mixte
 2 = Strict
 
-## Mode souple
+## Mode Souple
 Retrait libre, dépots libre
 
 ## Mode Strict
@@ -10,7 +10,7 @@ Retrait libre, dépots libre
 2. Si montant définie et montant actuel de la cagnotte est inférieur au montant définit => Impossible de retirer
 3. Si date ET montant définis, retrait possible si les deux objectifs sont atteints
 
-## Mode mixte
+## Mode Mixte
 1. Si date définie et si date du jour est inférieure à la date définie => Un retrait max de 50 % de la cagnotte
 2. idem montant
 3. idem montant + date
