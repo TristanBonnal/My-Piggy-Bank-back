@@ -15,9 +15,9 @@ class TotalCalculator
      * Récupère les opérations liées à une cagnotte et renvoie leur total
      *
      * @param Pot $pot
-     * @return void
+     * @return int
      */
-    public function calculateAmount(Pot $pot)
+    public function calculateAmount(Pot $pot):int
     {
 
         $operations = $this->operationRepository->getOperationsByPot($pot);

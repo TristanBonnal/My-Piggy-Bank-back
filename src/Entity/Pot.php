@@ -80,6 +80,8 @@ class Pot
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotNull()
+     * @Assert\Range(min=0, max=2)
      */
     private $type;
 

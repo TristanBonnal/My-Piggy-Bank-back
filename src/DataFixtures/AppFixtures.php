@@ -65,13 +65,15 @@ class AppFixtures extends Fixture
                 ->setName($faker->word(1, true))
                 ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                 ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
+                ->setType(mt_rand(0,2))
+
             ;
             $manager->persist($newPotAdmin);
             $newAdmin->addPot($newPotAdmin);
 
             // Opérations pour chaque cagnotte admin
             $adminOperations = [];
-            $rndJndex =  mt_rand(2,6);
+            $rndJndex =  mt_rand(3,8);
             for($j = 0; $j < $rndJndex; $j++) {
 
                 $newOperationAdmin = new Operation();
@@ -94,7 +96,7 @@ class AppFixtures extends Fixture
 
 
         //  Création users
-        for ($i = 1; $i <= 4; $i++) {
+        for ($i = 1; $i <= 5; $i++) {
             $newUser = new User();
             $newUser->setEmail($faker->email());
             $newUser->setFirstname($faker->firstName());
@@ -107,7 +109,7 @@ class AppFixtures extends Fixture
             $newUser->setCreatedAt($faker->dateTimeBetween('-2 years', 'now'));
             
             // Cagnottes users
-            $rndJndex = mt_rand(0,4);
+            $rndJndex = mt_rand(0,6);
             for ($j = 0; $j < $rndJndex; $j++) {
                 $numberOrNull = [null, $faker->numberBetween(5000, 10000)];
                 $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
@@ -116,6 +118,8 @@ class AppFixtures extends Fixture
                     ->setName($faker->word(1, true))
                     ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                     ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
+                    ->setType(mt_rand(0,2))
+                    
                 ;
 
                 $manager->persist($newPotUser);
@@ -123,7 +127,7 @@ class AppFixtures extends Fixture
 
                 // Opérations User
                 $userOperations = [];
-                $rndK =  mt_rand(1,5);
+                $rndK =  mt_rand(2,6);
                 for ($k = 1; $k <  $rndK; $k++) {
                     $newOperation = new Operation();
                     $newOperation->setType(mt_rand(0,1));
