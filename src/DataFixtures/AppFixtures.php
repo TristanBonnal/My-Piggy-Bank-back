@@ -80,9 +80,13 @@ class AppFixtures extends Fixture
                 $newOperationAdmin->setType(mt_rand(0,1));
                 $newOperationAdmin->setAmount($faker->numberBetween(100,1000));
 
-                //Vérification du solde de la cagnotte en cas de retrait
-                if (!$newOperationAdmin->getType() && ($newOperationAdmin->getAmount() > $this->calculator->calculateOperations($adminOperations))) {
-                    continue;
+                //Vérification du solde et du type de la cagnotte en cas de retrait, 
+                if (!$newOperationAdmin->getType()) {
+                    // Si le montant du retrait > somme totale de la cagnotte ou le mode est strict ou mixte
+                    if  ($newOperationAdmin->getAmount() > $this->calculator->calculateOperations($adminOperations) ||
+                        $newPotAdmin->getType() == 2 || $newPotAdmin->getType() == 1) {
+                        continue;
+                    }
                 }
                 $newAdmin->addOperation($newOperationAdmin);
                 $newPotAdmin->addOperation($newOperationAdmin);
@@ -134,8 +138,12 @@ class AppFixtures extends Fixture
                     $newOperation->setAmount($faker->numberBetween(100,1000));
 
                     //Vérification du solde de la cagnotte en cas de retrait
-                    if (!$newOperation->getType() && ($newOperation->getAmount() > $this->calculator->calculateOperations($userOperations))) {
-                        continue;
+                    if (!$newOperation->getType()) {
+                        // Si le montant du retrait > somme totale de la cagnotte ou le mode est strict ou mixte
+                        if  ($newOperation->getAmount() > $this->calculator->calculateOperations($userOperations) ||
+                            $newPotUser->getType() == 2 || $newPotUser->getType() == 1) {
+                            continue;
+                        }
                     }
                     $newUser->addOperation($newOperation);
                     $newPotUser->addOperation($newOperation);
