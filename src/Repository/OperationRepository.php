@@ -34,6 +34,24 @@ class OperationRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * Vérifie si une opération de type retrait a déja été effectuée
+     * 
+     * @return Operation[] Returns an array of Operation objects
+     */
+
+    public function getCashoutsNumber($pot)
+    {
+        return $this->createQueryBuilder('o')
+            ->select('count(o.type)')
+            ->andWhere('o.pot = :val')
+            ->andWhere('o.type = false')
+            ->setParameter('val', $pot)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     
 
 

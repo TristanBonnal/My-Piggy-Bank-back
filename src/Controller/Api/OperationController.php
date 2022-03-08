@@ -6,6 +6,7 @@ use App\Entity\Operation;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Pot;
 use App\Models\JsonError;
+use App\Service\HandlePotType;
 use App\Service\TotalCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -43,7 +44,7 @@ class OperationController extends AbstractController
      * 
      * @Route("/api/operations", name="api_add_operation", methods = {"POST"})
      */
-    public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
+    public function addOperation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator, HandlePotType $typeHandler): Response
     {
         // Deserialisation du contenu du formulaire 
         $data = $request->getContent();
@@ -63,6 +64,10 @@ class OperationController extends AbstractController
             if (!$pot) {
                 throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
             }
+
+            //Vérification du mode de déblocage en cas de demande de retrait (voir Service/HandleTypePot)
+            $typeHandler->checkType($newOperation);
+
             //Vérification du solde de la cagnotte en cas de retrait
             if (!$newOperation->getType() && ($newOperation->getAmount() > $calculator->calculateAmount($pot))) {
                 throw new Exception('Retrait supérieur au montant de la cagnotte :(', Response::HTTP_BAD_REQUEST);
@@ -71,7 +76,7 @@ class OperationController extends AbstractController
 
             $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
         } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), $e->getCode());
+            return new JsonResponse($e->getMessage(), 400);
         }
 
         //Vérification des données du formulaire
