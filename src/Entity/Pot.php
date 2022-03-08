@@ -78,6 +78,11 @@ class Pot
      */
     private $amount;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $type;
+
     // La date du jour sera automatique associée à la propriété createdAt
     public function __construct ()
     {
@@ -221,5 +226,17 @@ class Pot
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }
