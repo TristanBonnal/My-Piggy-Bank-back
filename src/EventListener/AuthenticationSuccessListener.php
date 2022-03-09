@@ -35,11 +35,14 @@ class AuthenticationSuccessListener
             'firstname' => $user->getFirstname(),
             'roles' => $user->getRoles(),
             'lastname' => $user->getLastname(),
+            'password' => $user->getPassword(),
             'birthDate' => $user->getBirthDate(),
             'status' => $user->getStatus(),
             'phone' => $user->getPhone(),
             'iban' => $user->getIban(),
             'bic' => $user->getBic()
+
+
         ];
 
         $event->setData($data);
