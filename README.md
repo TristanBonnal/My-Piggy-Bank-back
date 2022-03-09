@@ -42,7 +42,7 @@ php bin/console lexik:jwt:generate-keypair
 
 ### PHP configuration
 
-In order to run your application, you need to make sure that you have the following moduls installed :
+In order to run your application, you need to make sure that you have the following modules installed :
 
 * intl
 * openssl
