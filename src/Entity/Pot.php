@@ -90,6 +90,7 @@ class Pot
     public function __construct ()
     {
         $this->createdAt = new \DateTime();
+        $this->type = 0;
         $this->operations = new ArrayCollection();
     }
 
