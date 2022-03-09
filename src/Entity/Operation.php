@@ -28,14 +28,14 @@ class Operation
 
     /**
      * @ORM\Column(type="boolean", options = {"default" : true})
-     * @Groups ({"show_operation"})
+     * @Groups ({"show_operation", "show_pot"})
      * @Assert\NotNull()
      */
     private $type;
 
     /**
      * @ORM\Column(type="integer", options = {"unsigned" : true})
-     * @Groups ({"show_operation"})
+     * @Groups ({"show_operation", "show_pot"})
      * @Assert\NotBlank()
      * @Assert\GreaterThan(
      *     value = 0
@@ -45,7 +45,7 @@ class Operation
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups ({"show_operation"})
+     * @Groups ({"show_operation", "show_pot"})
      */
     private $createdAt;
 

@@ -68,6 +68,7 @@ class Pot
 
     /**
      * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="pot")
+     * @Groups ({"show_pot"})
      */
     private $operations;
 
