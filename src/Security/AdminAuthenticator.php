@@ -65,6 +65,6 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->isMethod('POST') && '/login' === $request->getPathInfo();
+        return $request->isMethod('POST') && '/login_back' === $request->getPathInfo();
     }
 }
