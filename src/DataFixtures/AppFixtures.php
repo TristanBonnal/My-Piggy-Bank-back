@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
                 ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                 ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
                 // Type défini à souple si aucun objectif
-                ->setType(empty($newPotAdmin->getAmountGoal()) && empty($newPotAdmin->getDateGoal()) ? 0 : mt_rand(1,2))
+                ->setType(empty($newPotAdmin->getAmountGoal()) && empty($newPotAdmin->getDateGoal()) ? 0 : mt_rand(0,2))
             ;
 
             $manager->persist($newPotAdmin);
@@ -124,9 +124,7 @@ class AppFixtures extends Fixture
                     ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                     ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
                     // Type défini à souple si aucun objectif
-                    ->setType(empty($newPotUser->getAmountGoal()) && empty($newPotUser->getDateGoal()) ? 0 : mt_rand(1,2))
-                    ->setType(mt_rand(0,2))
-                    
+                    ->setType(empty($newPotUser->getAmountGoal()) && empty($newPotUser->getDateGoal()) ? 0 : mt_rand(0,2))                    
                 ;
 
                 $manager->persist($newPotUser);
