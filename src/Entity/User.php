@@ -133,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct ()
     {
         $this->roles[] = 'ROLE_USER';
-        $this->createdAt = new \DateTime("now");
+        $this->createdAt = new \DateTime();
         $this->status = 1;
         $this->pots = new ArrayCollection();
         $this->operations = new ArrayCollection();
