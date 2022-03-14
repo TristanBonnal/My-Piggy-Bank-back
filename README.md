@@ -39,7 +39,7 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
- Load fixtures in order to fill your databse
+ :boom: Load fixtures in order to fill your database
 
 ```bash
 php bin/console doctrine:fixtures:load
@@ -64,4 +64,14 @@ In order to run your application, you need to make sure that you have the follow
 * intl
 * openssl
 
-:rocket: You're now good to go and make it rain !
+<details close>
+
+<summary>Now, you must be like...</summary>
+
+
+![Alt Text] (https://media2.giphy.com/media/5GoVLqeAOo6PK/giphy.gif?cid=ecf05e47ujmt5gimnmzfj5c8gj8nvq38ljweoc4g0vfiz8uj&rid=giphy.gif&ct=g)
+
+</details>
+
+
+:rocket: You're now good to go :rocket:
