@@ -69,7 +69,7 @@ In order to run your application, you need to make sure that you have the follow
 <summary>Now, you must be like...</summary>
 
 
-![Alt Text] (https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif)
+![Alt Text](https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif)
 
 </details>
 
