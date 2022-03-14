@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Operation;
 use App\Entity\User;
 use App\Entity\Pot;
+use App\Provider\PotNameProvider;
 use App\Service\TotalCalculator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\DBAL\Connection;
@@ -40,6 +41,8 @@ class AppFixtures extends Fixture
         // Bundle externe permettant la génération de données aléatoires
         $faker = Factory::create('fr_FR');
 
+        $potNameProvider = new PotNameProvider();
+
         // Création d'un admin
         $newAdmin = new User;
         $newAdmin
@@ -62,7 +65,7 @@ class AppFixtures extends Fixture
             $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
             $newPotAdmin = new Pot();
             $newPotAdmin
-                ->setName($faker->word(1, true))
+                ->setName($potNameProvider->getPotName())
                 ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                 ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
                 // Type défini à souple si aucun objectif
@@ -120,7 +123,7 @@ class AppFixtures extends Fixture
                 $dateOrNull = [null, $faker->dateTimeBetween('now', '+2 years')];
                 $newPotUser = new Pot();
                 $newPotUser
-                    ->setName($faker->word(1, true))
+                    ->setName($potNameProvider->getPotName())
                     ->setDateGoal($dateOrNull[array_rand($dateOrNull)])
                     ->setAmountGoal($numberOrNull[array_rand($numberOrNull)])
                     // Type défini à souple si aucun objectif
