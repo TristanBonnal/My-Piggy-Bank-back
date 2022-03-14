@@ -62,7 +62,7 @@ class OperationController extends AbstractController
         $pot = $newOperation->getPot();
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
+                throw new Exception("Cette cagnotte n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
             }
 
             //Vérification du mode de déblocage en cas de demande de retrait (voir Service/HandleTypePot)
@@ -74,7 +74,7 @@ class OperationController extends AbstractController
             }
 
 
-            $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+            $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), "Vous n'avez pas accès à cette cagnotte");
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), 400);
         }
@@ -110,9 +110,9 @@ class OperationController extends AbstractController
         // Vérification de la cagnotte et de l'utilisateur
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
+                throw new Exception("Cette cagnotte n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
             }
-            $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+            $this->denyAccessUnlessGranted('USER', $pot->getUser(), "Vous n'avez pas accès à cette cagnotte");
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }

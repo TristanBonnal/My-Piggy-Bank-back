@@ -31,7 +31,7 @@ class HandlePotType
                 // Si objectif date défini et aujourd'hui < date ou si le montant de la cagnotte  est défini et la somme de la cagnotte < objectif montant fixé
                 if ($pot->getDateGoal() && new \Datetime() < $pot->getDateGoal() ||
                     $pot->getAmountGoal() && $this->calculator->calculateAmount($pot) < $pot->getAmountGoal()) { 
-                        throw new Exception('Retrait impossible en mode strict tant que les objectifs n\'ont pas été atteints', Response::HTTP_BAD_REQUEST); 
+                        throw new Exception("Retrait impossible en mode strict tant que les objectifs n'ont pas été atteints", Response::HTTP_BAD_REQUEST); 
                 }
             } 
             

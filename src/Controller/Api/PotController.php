@@ -88,9 +88,9 @@ class PotController extends AbstractController
         // Vérification de la cagnotte et de l'utilisateur
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
+                throw new Exception("Cette cagnotte n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
             }
-            $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+            $this->denyAccessUnlessGranted('USER', $pot->getUser(), "Vous n'avez pas accès à cette cagnotte");
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
@@ -122,10 +122,10 @@ class PotController extends AbstractController
         // Si la cagnotte n'existe pas, on renvoie une erreur
         try {
             if (!$pot) {
-                throw new Exception('Cette cagnotte n\'existe pas (identifiant erroné)', RESPONSE::HTTP_NOT_FOUND);
+                throw new Exception("Cette cagnotte n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
             }
         // Seul le créateur de la cagnotte a accès à celle-ci
-            $this->denyAccessUnlessGranted('USER', $pot->getUser(), 'Vous n\'avez pas accès à cette cagnotte');
+            $this->denyAccessUnlessGranted('USER', $pot->getUser(), "Vous n'avez pas accès à cette cagnotte");
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
