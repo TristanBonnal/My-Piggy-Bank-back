@@ -30,6 +30,10 @@ class PotController extends AbstractController
         $data = $request->getContent();
         try {
             $newPot = $serializer->deserialize($data, Pot::class, "json");
+            // Type défini à souple si aucun objectif
+            if (empty($newPot->getAmountGoal()) && empty($newPot->getDateGoal())) {
+                $newPot->setType(0);
+            }
             $newPot->setUser($this->getUser());
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
