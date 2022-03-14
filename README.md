@@ -1,17 +1,17 @@
-# :pig: My Piggy Bank
+## :pig: My Piggy Bank
 
 My Piggy Bank has been created for those who are struggling saving up and those who are willing to save up for some reason.
 It's been built by 5 friends and still improving.
 
-## How do I set up the project ?
+### How do I set up the project ? :point_down:
 
-### Clone the repository & run
+ Clone the repository & run
 
 ```bash
 composer install
 ```
 
-### Create and set your own .env.local
+ :fountain_pen: Create and set your own .env.local
 
 * The DATABASE_URL allows __doctrine__ to reach your database
 
@@ -27,41 +27,41 @@ JWT_PASSPHRASE=e65cbbbe71ea5677b6199c1821c26d0b
 APP_ENV=dev
 ```
 
-### Create your database
+ :genie_man: Create your database
 
 ```bash
 php bin/console doctrine:database:create
 ```
 
-### Migrate your database
+ :dove: Migrate your database
 
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
 
-### Load fixtures in order to fill your databse
+ Load fixtures in order to fill your databse
 
 ```bash
 php bin/console doctrine:fixtures:load
 ```
 
-### :key: Generate a keypair for lexik (JWT authentication)
+ :key: Generate a keypair for lexik (JWT authentication)
 
 ```bash
 php bin/console lexik:jwt:generate-keypair
 ```
 
-### EasyAdmin has been used to build the Back-Office, run
+ :clipboard: EasyAdmin has been used to build the Back-Office, run
 
 ```bash
 composer require easycorp/easyadmin-bundle
 ```
 
-### PHP configuration
+ :toolbox: PHP configuration
 
 In order to run your application, you need to make sure that you have the following modules installed :
 
 * intl
 * openssl
 
-:rocket: You're now good to go and make it rain :dollar: !
+:rocket: You're now good to go and make it rain !
