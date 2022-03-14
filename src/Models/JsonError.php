@@ -15,7 +15,7 @@ class JsonError
     
     public function __construct(int $error_code = Response::HTTP_NOT_FOUND, string $message = "Not Found")
     {
-        $this->error = $error_code;
+        $this->error_code = $error_code;
         $this->messages[] = $message;
     }
     
