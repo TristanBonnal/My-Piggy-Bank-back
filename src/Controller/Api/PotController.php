@@ -119,7 +119,7 @@ class PotController extends AbstractController
      *
      * @Route("/api/pots/{id}", name="api_update_pot", methods = {"PATCH"})
      */
-    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
     {
         $data = $request->getContent();
 
@@ -159,7 +159,9 @@ class PotController extends AbstractController
             return $this->json($myJsonError, $myJsonError->getError());
         }
 
-        $doctrine->flush();    
+        $doctrine->flush();  
+        //Récupération du total des opérations d'une cagnotte
+        $calculator->calculateAmount($pot);
         
         return $this->json(
             $pot, 

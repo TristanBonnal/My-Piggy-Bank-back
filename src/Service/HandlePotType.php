@@ -22,7 +22,6 @@ class HandlePotType
     {
         $pot = $operation->getPot();
         $cashouts = $this->operationRepository->getCashoutsNumber($pot)[0][1];
-        
 
         // Si retrait
         if (!$operation->getType()) {   
