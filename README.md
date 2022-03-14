@@ -3,13 +3,17 @@
 My Piggy Bank has been created for those who are struggling saving up and those who are willing to save up for some reason.
 It's been built by 5 friends and still improving.
 
+---
+
 ### How do I set up the project ? :point_down:
 
- Clone the repository & run
+ :bulb: Clone the repository & run
 
 ```bash
 composer install
 ```
+
+---
 
  :fountain_pen: Create and set your own .env.local
 
@@ -27,11 +31,15 @@ JWT_PASSPHRASE=e65cbbbe71ea5677b6199c1821c26d0b
 APP_ENV=dev
 ```
 
+---
+
  :genie_man: Create your database
 
 ```bash
 php bin/console doctrine:database:create
 ```
+
+---
 
  :dove: Migrate your database
 
@@ -39,11 +47,15 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
+---
+
  :boom: Load fixtures in order to fill your database
 
 ```bash
 php bin/console doctrine:fixtures:load
 ```
+
+---
 
  :key: Generate a keypair for lexik (JWT authentication)
 
@@ -51,11 +63,15 @@ php bin/console doctrine:fixtures:load
 php bin/console lexik:jwt:generate-keypair
 ```
 
+---
+
  :clipboard: EasyAdmin has been used to build the Back-Office, run
 
 ```bash
 composer require easycorp/easyadmin-bundle
 ```
+
+---
 
  :toolbox: PHP configuration
 
@@ -66,12 +82,9 @@ In order to run your application, you need to make sure that you have the follow
 
 <details close>
 
-<summary>Now, you must be like...</summary>
+<summary> :rocket: Now, you must be like... :rocket:</summary>
 
 
 ![Alt Text](https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif)
 
 </details>
-
-
-:rocket: You're now good to go :rocket:
