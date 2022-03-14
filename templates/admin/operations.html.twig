@@ -1,0 +1,24 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+{% if ea.crud.currentAction == 'detail' %}
+    <table class="table table-striped">
+        <tr>
+            <th>N° transaction</th>
+            <th>Type</th>
+            <th>Montant</th>
+            <th>Fait le</th>
+        </tr>
+
+        {% for value in field.value %}
+        <tr>
+            <td>{{ value.id }}</td>
+            <td>{{ value.type ? "Dépôt" : "Retrait"}}</td>
+            <td>{{ value.amount }}</td>
+            <td>{{ value.createdAt|date('d/m/Y') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

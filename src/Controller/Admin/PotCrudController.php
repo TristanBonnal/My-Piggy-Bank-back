@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -38,7 +39,8 @@ class PotCrudController extends AbstractCrudController
             DateField::new('createdAt', 'Créee le'),
             DateField::new('updatedAt', 'Modifiée le')->hideOnForm(),
             AssociationField::new('user', 'Utilisateur'),
-            AssociationField::new('operations', 'Opérations'),
+            AssociationField::new('operations', 'Nombre d\'opérations'),
+            CollectionField::new('operations', 'Opérations')->setTemplatePath('admin/operations.html.twig')->hideOnIndex(),
         ];
     }
 

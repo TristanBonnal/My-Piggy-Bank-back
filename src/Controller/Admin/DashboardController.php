@@ -26,7 +26,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('My Piggy Bank Back');
+            ->setTitle('My Piggy Back');
     }
 
     // On configure ce qu'on veut de disponible dans le Dashboard afin de gérer le CRUD

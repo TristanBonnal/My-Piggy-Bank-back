@@ -132,10 +132,10 @@ class Operation
     // On définit le type, on met en variable le montant, on concatène et on retourne le tout en string
     public function __toString()
     {
-        $type = $this->getType() ? "Dépôt" : "Retrait";
+        $type = $this->getType() ? "dépôt" : "retrait";
         $amount = $this->getAmount();
 
-        return "Votre " . $type . " numéro : " . $this->getId() . " est d'un montant de " . $amount . " euros.";
+        return "Votre " . $type . " numéro " . $this->getId() . " est d'un montant de " . $amount . " euros\n";
     }
 
 }
