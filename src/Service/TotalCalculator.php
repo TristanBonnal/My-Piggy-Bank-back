@@ -26,6 +26,7 @@ class TotalCalculator
             $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
         }
         $pot->setAmount($total);
+        return $pot->getAmount();
     }
 
     /**
