@@ -2,6 +2,8 @@
 
 namespace App\Provider;
 
+// Provider to be used in the fixtures
+
 class PotNameProvider
 {
     private $name = [
@@ -14,6 +16,8 @@ class PotNameProvider
         "Anniversaire",
         "Noël"
     ];
+
+    // Get one random pot's name
 
     public function getPotName()
     {
