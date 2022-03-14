@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -33,10 +34,8 @@ class UserController extends AbstractController
         // Deserialisation du contenu du formulaire et hashage du password
         try {
             $newUser = $serializer->deserialize($data, User::class, "json");
-            $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
-            $newUser->setPassword($hashedPassword);
-        } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (NotNormalizableValueException $e) {
+            return new JsonResponse("Erreur de type pour le champ '". $e->getPath() . "': " . $e->getCurrentType() . " au lieu de : " . implode('|', $e->getExpectedTypes()), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // Vérification des données du formulaire
@@ -47,6 +46,8 @@ class UserController extends AbstractController
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
+        $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
+        $newUser->setPassword($hashedPassword);
 
         $doctrine->persist($newUser);
         $doctrine->flush();
@@ -92,10 +93,8 @@ class UserController extends AbstractController
         // Deserialisation du contenu du formulaire
         try {
             $updatedUser = $serializer->deserialize($data, User::class, "json");
-            $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
-            $updatedUser->setPassword($hashedPassword);
-        } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (NotNormalizableValueException $e) {
+            return new JsonResponse("Erreur de type pour le champ '". $e->getPath() . "': " . $e->getCurrentType() . " au lieu de : " . implode('|', $e->getExpectedTypes()), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user
             ->setPassword($updatedUser->getPassword())
@@ -116,6 +115,9 @@ class UserController extends AbstractController
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
+
+        $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
+        $updatedUser->setPassword($hashedPassword);
 
         $doctrine->flush();
 

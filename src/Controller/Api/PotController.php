@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -35,8 +36,8 @@ class PotController extends AbstractController
                 $newPot->setType(0);
             }
             $newPot->setUser($this->getUser());
-        } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (NotNormalizableValueException $e) {
+            return new JsonResponse("Erreur de type pour le champ '". $e->getPath() . "': " . $e->getCurrentType() . " au lieu de : " . implode('|', $e->getExpectedTypes()), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // Vérification des données formualaire
@@ -119,7 +120,7 @@ class PotController extends AbstractController
      *
      * @Route("/api/pots/{id}", name="api_update_pot", methods = {"PATCH"})
      */
-    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
     {
         $data = $request->getContent();
 
@@ -138,14 +139,15 @@ class PotController extends AbstractController
         try {
             $newPot = $serializer->deserialize($data, Pot::class, "json");
             $newPot->setUser($this->getUser());
-        } catch (Exception $e) {
-            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        } catch (NotNormalizableValueException $e) {
+            return new JsonResponse("Erreur de type pour le champ '". $e->getPath() . "': " . $e->getCurrentType() . " au lieu de : " . implode('|', $e->getExpectedTypes()), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $pot
             ->setName($newPot->getName())
             ->setDateGoal($newPot->getDateGoal())
             ->setAmountGoal($newPot->getAmountGoal())
+            ->setType($newPot->getType())
             ->setUpdatedAt(new \DateTime)
         ;
 
@@ -158,7 +160,9 @@ class PotController extends AbstractController
             return $this->json($myJsonError, $myJsonError->getError());
         }
 
-        $doctrine->flush();    
+        $doctrine->flush();  
+        //Récupération du total des opérations d'une cagnotte
+        $calculator->calculateAmount($pot);
         
         return $this->json(
             $pot, 

@@ -10,12 +10,12 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
  */
 class JsonError
 {
-    private $error;
+    private $error_code;
     private $messages;
     
-    public function __construct(int $error = Response::HTTP_NOT_FOUND, string $message = "Not Found")
+    public function __construct(int $error_code = Response::HTTP_NOT_FOUND, string $message = "Not Found")
     {
-        $this->error = $error;
+        $this->error_code = $error_code;
         $this->messages[] = $message;
     }
     
@@ -31,7 +31,7 @@ class JsonError
      */ 
     public function getError()
     {
-        return $this->error;
+        return $this->error_code;
     }
 
     /**
@@ -39,9 +39,9 @@ class JsonError
      *
      * @return  self
      */ 
-    public function setError($error)
+    public function setError($error_code)
     {
-        $this->error = $error;
+        $this->error_code = $error_code;
 
         return $this;
     }

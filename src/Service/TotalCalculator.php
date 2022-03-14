@@ -17,7 +17,7 @@ class TotalCalculator
      * @param Pot $pot
      * @return int
      */
-    public function calculateAmount(Pot $pot):int
+    public function calculateAmount(Pot $pot)
     {
 
         $operations = $this->operationRepository->getOperationsByPot($pot);
@@ -26,7 +26,6 @@ class TotalCalculator
             $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
         }
         $pot->setAmount($total);
-        return $pot->getAmount();
     }
 
     /**
