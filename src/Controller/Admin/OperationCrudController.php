@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Operation;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
@@ -23,11 +26,14 @@ class OperationCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm(),
-            BooleanField::new('type', 'Type'),
-            MoneyField::new('amount', 'Montant')->setCurrency('EUR'),
+            ChoiceField::new('type', 'Type')->setChoices([
+                "Retrait" => 0,
+                "Dépot" => 1,
+            ]),
+            MoneyField::new('amount', 'Montant')->setCurrency('EUR')->setStoredAsCents(false),
             DateField::new('createdAt', 'Créée le'),
-            AssociationField::new('pot', 'Cagnotte')->autocomplete(),
-            AssociationField::new('user', 'Utilisateur')->autocomplete(),
+            AssociationField::new('pot', 'Cagnotte'),
+            AssociationField::new('user', 'Utilisateur'),
         ];
     }
 
@@ -37,6 +43,18 @@ class OperationCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Opération')
             ->setEntityLabelInPlural('Opérations')
         ;
+    }
+
+    public function configureActions(Actions $actions): Actions 
+    {
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
+            ->remove(Crud::PAGE_INDEX, Action::EDIT)
+            ->remove(Crud::PAGE_DETAIL, Action::EDIT)
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE)
+            ;
     }
     
 }
