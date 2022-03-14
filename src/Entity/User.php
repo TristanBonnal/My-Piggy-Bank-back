@@ -44,11 +44,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @Assert\Length(min = 4)
      */
     private $password;
     
-
 
     /**
      * @ORM\Column(type="string", length=255)

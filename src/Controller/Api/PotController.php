@@ -146,6 +146,7 @@ class PotController extends AbstractController
             ->setName($newPot->getName())
             ->setDateGoal($newPot->getDateGoal())
             ->setAmountGoal($newPot->getAmountGoal())
+            ->setType($newPot->getType())
             ->setUpdatedAt(new \DateTime)
         ;
 

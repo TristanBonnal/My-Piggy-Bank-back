@@ -33,9 +33,8 @@ class UserController extends AbstractController
         // Deserialisation du contenu du formulaire et hashage du password
         try {
             $newUser = $serializer->deserialize($data, User::class, "json");
-            $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
-            $newUser->setPassword($hashedPassword);
         } catch (Exception $e) {
+            dd($e);
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -47,6 +46,8 @@ class UserController extends AbstractController
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
+        $hashedPassword = $hasher->hashPassword($newUser, $newUser->getPassword());
+        $newUser->setPassword($hashedPassword);
 
         $doctrine->persist($newUser);
         $doctrine->flush();
@@ -92,8 +93,6 @@ class UserController extends AbstractController
         // Deserialisation du contenu du formulaire
         try {
             $updatedUser = $serializer->deserialize($data, User::class, "json");
-            $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
-            $updatedUser->setPassword($hashedPassword);
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -116,6 +115,9 @@ class UserController extends AbstractController
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
+
+        $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
+        $updatedUser->setPassword($hashedPassword);
 
         $doctrine->flush();
 
