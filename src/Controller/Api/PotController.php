@@ -36,7 +36,7 @@ class PotController extends AbstractController
             }
             $newPot->setUser($this->getUser());
         } catch (NotNormalizableValueException $e) {
-            return new JsonResponse("Erreur de type pour le champ '". $e->getPath() . "': " . $e->getCurrentType() . " au lieu de : " . implode('|', $e->getExpectedTypes()), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // Vérification des données formualaire
