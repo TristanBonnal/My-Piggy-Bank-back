@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Pot;
-use App\Service\TotalCalculator;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -13,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
@@ -29,9 +29,8 @@ class PotCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom'),
-            TextField::new('amount', 'Montant'),
             DateField::new('dateGoal', 'Objectif de date'),
-            IntegerField::new('amount', 'Montant'),
+            MoneyField::new('amount', 'Montant actuel')->setCurrency('EUR')->setStoredAsCents(false),
             MoneyField::new('amountGoal', 'Montant à atteindre')->setCurrency('EUR')->setStoredAsCents(false),
             ChoiceField::new('type', 'Type')->setChoices([
                 "Souple" => 0,
