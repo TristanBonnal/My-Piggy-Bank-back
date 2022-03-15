@@ -30,6 +30,7 @@ class PotCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom'),
             DateField::new('dateGoal', 'Objectif de date'),
+            MoneyField::new('amount', 'Montant actuel')->setCurrency('EUR')->setStoredAsCents(false),
             MoneyField::new('amountGoal', 'Montant à atteindre')->setCurrency('EUR')->setStoredAsCents(false),
             ChoiceField::new('type', 'Type')->setChoices([
                 "Souple" => 0,

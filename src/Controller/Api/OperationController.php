@@ -66,16 +66,16 @@ class OperationController extends AbstractController
                 throw new Exception("Cette cagnotte n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
             }
 
+            $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), "Vous n'avez pas accès à cette cagnotte");
+
             //Vérification du mode de déblocage en cas de demande de retrait (voir Service/HandleTypePot)
             $typeHandler->checkType($newOperation);
 
             //Vérification du solde de la cagnotte en cas de retrait
-            if (!$newOperation->getType() && ($newOperation->getAmount() > $calculator->calculateAmount($pot))) {
+            if (!$newOperation->getType() && ($newOperation->getAmount() > $pot->getAmount())) {
                 throw new Exception('Retrait supérieur au montant de la cagnotte :(', Response::HTTP_BAD_REQUEST);
             }
 
-
-            $this->denyAccessUnlessGranted('USER', $newOperation->getPot()->getUser(), "Vous n'avez pas accès à cette cagnotte");
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), 400);
         }
@@ -89,6 +89,7 @@ class OperationController extends AbstractController
         }
 
         $doctrine->persist($newOperation);
+        $calculator->calculateAmount($pot);     //Recalcule le montant de la cagnotte après opération
         $doctrine->flush();
 
         return $this->json(

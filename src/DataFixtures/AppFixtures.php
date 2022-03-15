@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\AppFixtures\Provider\PotNameProvider;
 use App\Entity\Operation;
 use App\Entity\User;
 use App\Entity\Pot;
-use App\Provider\PotNameProvider;
 use App\Service\TotalCalculator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\DBAL\Connection;
@@ -92,12 +92,15 @@ class AppFixtures extends Fixture
                         continue;
                     }
                 }
+                // Actualisation Admin et Cagnotte
                 $newAdmin->addOperation($newOperationAdmin);
                 $newPotAdmin->addOperation($newOperationAdmin);
+
                 $manager->persist($newOperationAdmin);
                 $adminOperations[] = $newOperationAdmin;
-
             }
+            // Définition montant cagnotte à la fin des opérations
+            $newPotAdmin->setAmount($this->calculator->calculateOperations($adminOperations));
         }
         
         $manager->persist($newAdmin);
@@ -151,9 +154,13 @@ class AppFixtures extends Fixture
                     }
                     $newUser->addOperation($newOperation);
                     $newPotUser->addOperation($newOperation);
+
                     $manager->persist($newOperation);
                     $userOperations[] = $newOperation;
                 }
+
+                // Définition montant cagnotte à la fin des opérations
+                $newPotUser->setAmount($this->calculator->calculateOperations($userOperations));
             }
             $manager->persist($newUser);
         }

@@ -74,19 +74,18 @@ class Pot
     private $operations;
 
     /**
-     * Undocumented variable
-     *@Groups ({"show_pot"})
-     * @var float
-     */
-    private $amount;
-
-    /**
      * @ORM\Column(type="integer")
      * @Groups ({"show_pot"})
      * @Assert\NotNull()
      * @Assert\Range(min=0, max=2)
      */
     private $type;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups ({"show_pot"})
+     */
+    private $amount;
 
     // La date du jour sera automatique associée à la propriété createdAt
     public function __construct ()
@@ -204,29 +203,6 @@ class Pot
         return $this;
     }
 
-    /**
-     * Get *@Groups ({"show_pot"})
-     *
-     * @return  float
-     */ 
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
-     * Set *@Groups ({"show_pot"})
-     *
-     * @param  float  $amount  *@Groups ({"show_pot"})
-     *
-     * @return  self
-     */ 
-    public function setAmount(float $amount)
-    {
-        $this->amount = $amount;
-
-        return $this;
-    }
 
      // Retourne le nom de la cagnotte en chaîne de caractères
     public function __toString()
@@ -242,6 +218,18 @@ class Pot
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getAmount(): ?int
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(?int $amount): self
+    {
+        $this->amount = $amount;
 
         return $this;
     }
