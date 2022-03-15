@@ -53,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups ({"show_user"})
      * @Groups ({"show_operation"})
+     * @Groups ({"show_pot"})
      * @Assert\Length(
      *  min = 2,
      *  max = 60
@@ -64,6 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      * @Groups ({"show_user"})
      * @Groups ({"show_operation"})
+     * @Groups ({"show_pot"})
      * @Assert\Length(
      * min = 2,
      * max = 60)
