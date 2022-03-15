@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Provider;
+namespace App\AppFixtures\Provider;
 
 // Provider to be used in the fixtures
 

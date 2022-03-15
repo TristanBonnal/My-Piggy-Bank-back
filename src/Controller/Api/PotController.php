@@ -4,7 +4,6 @@ namespace App\Controller\Api;
 
 use App\Entity\Pot;
 use App\Models\JsonError;
-use App\Service\TotalCalculator;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -65,13 +64,10 @@ class PotController extends AbstractController
      * 
      * @Route("/api/pots", name="api_pots", methods = {"GET"})
      */
-    public function potsByUser(TotalCalculator $calculator): Response
+    public function potsByUser(): Response
     {
         $pots = $this->getUser()->getPots();
-        foreach ($pots as $pot) {
-            //Récupération du total des opérations d'une cagnotte
-            $calculator->calculateAmount($pot);
-        }
+
         return $this->json(
             $pots, 
             Response::HTTP_OK,
@@ -88,7 +84,7 @@ class PotController extends AbstractController
      * 
      * @Route("/api/pots/{id}", name="api_show_pot", methods = {"GET"})
      */
-    public function showPot(Pot $pot = null, TotalCalculator $calculator): Response
+    public function showPot(Pot $pot = null): Response
     {
         // Vérification de la cagnotte et de l'utilisateur
         try {
@@ -99,9 +95,6 @@ class PotController extends AbstractController
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
-
-        //Récupération du total des opérations d'une cagnotte
-        $calculator->calculateAmount($pot);
 
         return $this->json(
             $pot, 
@@ -120,7 +113,7 @@ class PotController extends AbstractController
      *
      * @Route("/api/pots/{id}", name="api_update_pot", methods = {"PATCH"})
      */
-    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, TotalCalculator $calculator): Response
+    public function updatePot(Pot $pot = null,EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
     {
         $data = $request->getContent();
 
@@ -161,9 +154,7 @@ class PotController extends AbstractController
         }
 
         $doctrine->flush();  
-        //Récupération du total des opérations d'une cagnotte
-        $calculator->calculateAmount($pot);
-        
+       
         return $this->json(
             $pot, 
             Response::HTTP_OK,
