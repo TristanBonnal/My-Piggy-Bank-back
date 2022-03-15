@@ -23,6 +23,7 @@ class Operation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups ({"show_operation", "show_pot"})
      */
     private $id;
 
