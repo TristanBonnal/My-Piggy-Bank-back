@@ -89,7 +89,7 @@ class OperationController extends AbstractController
         }
 
         $doctrine->persist($newOperation);
-        $calculator->calculateAmount($pot);     //Recalcule le montant de la cagnotte après opération
+        $calculator->calculateAmount($pot, $newOperation);     //Recalcule le montant de la cagnotte après opération
         $doctrine->flush();
 
         return $this->json(

@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Operation;
 use App\Entity\Pot;
 use App\Repository\OperationRepository;
 
@@ -17,10 +18,11 @@ class TotalCalculator
      * @param Pot $pot
      * @return int
      */
-    public function calculateAmount(Pot $pot)
+    public function calculateAmount(Pot $pot, Operation $operation)
     {
 
         $operations = $this->operationRepository->getOperationsByPot($pot);
+        $operations[] = $operation;
         $total = 0;
         foreach ($operations as $operation) {
             $total += $operation->getType() ? $operation->getAmount() : -$operation->getAmount();
