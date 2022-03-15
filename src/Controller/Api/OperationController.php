@@ -70,7 +70,7 @@ class OperationController extends AbstractController
             $typeHandler->checkType($newOperation);
 
             //Vérification du solde de la cagnotte en cas de retrait
-            if (!$newOperation->getType() && ($newOperation->getAmount() > $calculator->calculateAmount($pot))) {
+            if (!$newOperation->getType() && ($newOperation->getAmount() > $pot->getAmount())) {
                 throw new Exception('Retrait supérieur au montant de la cagnotte :(', Response::HTTP_BAD_REQUEST);
             }
 
@@ -89,6 +89,7 @@ class OperationController extends AbstractController
         }
 
         $doctrine->persist($newOperation);
+        $calculator->calculateAmount($pot);     //Recalcule le montant de la cagnotte après opération
         $doctrine->flush();
 
         return $this->json(
