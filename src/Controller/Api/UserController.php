@@ -97,7 +97,7 @@ class UserController extends AbstractController
             return new JsonResponse("Erreur de type pour le champ '". $e->getPath() . "': " . $e->getCurrentType() . " au lieu de : " . implode('|', $e->getExpectedTypes()), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user
-            ->setPassword($updatedUser->getPassword())
+            ->setPassword($hasher->hashPassword($updatedUser, $updatedUser->getPassword()))
             ->setFirstname($updatedUser->getFirstName())
             ->setLastname($updatedUser->getLastName())
             ->setBirthDate($updatedUser->getBirthDate())
@@ -115,9 +115,6 @@ class UserController extends AbstractController
             $myJsonError->setValidationErrors($errors);
             return $this->json($myJsonError, $myJsonError->getError());
         }
-
-        $hashedPassword = $hasher->hashPassword($updatedUser, $updatedUser->getPassword());
-        $updatedUser->setPassword($hashedPassword);
 
         $doctrine->flush();
 

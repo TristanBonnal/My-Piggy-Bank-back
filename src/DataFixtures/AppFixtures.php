@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\AppFixtures\Provider\PotNameProvider;
+use App\DataFixtures\Provider\PotNameProvider;
 use App\Entity\Operation;
 use App\Entity\User;
 use App\Entity\Pot;
