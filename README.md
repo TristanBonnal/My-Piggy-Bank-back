@@ -65,10 +65,10 @@ php bin/console lexik:jwt:generate-keypair
 
 ---
 
- :clipboard: EasyAdmin has been used to build the Back-Office, run
+ :clipboard: You need to clear the cache
 
 ```bash
-composer require easycorp/easyadmin-bundle
+php bin/console cache:clear
 ```
 
 ---
