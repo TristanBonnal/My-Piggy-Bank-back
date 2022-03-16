@@ -29,19 +29,19 @@ class UserCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             EmailField::new('email'),
-            ArrayField::new('roles', 'Rôle'),
+            ArrayField::new('roles', 'Rôle')->hideOnIndex(),
             TextField::new('firstname', 'Prénom'),
             TextField::new('lastname', 'Nom'),
-            DateField::new('birthDate', 'Date de naissance'),
+            DateField::new('birthDate', 'Date de naissance')->hideOnIndex(),
             ChoiceField::new('status', 'Statut')->setChoices([
                 "Inactif" => 0,
                 "Actif" => 1,
             ]),
-            TextField::new('phone', 'Numéro de téléphone'),
+            TextField::new('phone', 'Numéro de téléphone')->hideOnIndex(),
             DateField::new('createdAt', 'Créé le'),
-            DateField::new('updatedAt', 'Modifié le')->hideOnForm(),
-            TextField::new('iban'),
-            TextField::new('bic'),
+            DateField::new('updatedAt', 'Modifié le')->hideOnForm()->hideOnIndex(),
+            TextField::new('iban')->hideOnIndex(),
+            TextField::new('bic')->hideOnIndex(),
         ];
     }
 
