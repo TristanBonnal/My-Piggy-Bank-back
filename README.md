@@ -8,18 +8,34 @@ For more informations, you can see our demo on Youtube here:
 
 [My Piggy Bank](http://my-piggy-bank.surge.sh/) :pig_nose:
 - View as visitor
-![image info](./piggySC.png)
+![image info](./screenshots/piggySC.png)
 - Register form
-![image info](./piggySC2.png)
+![image info](./screenshots/piggySC2.png)
 - Create a new pot
-![image info](./piggySC3.png)
+![image info](./screenshots/piggySC3.png)
 - See all our pots
-![image info](./piggySC4.png)
+![image info](./screenshots/piggySC4.png)
 - Make operations on a pot
-![image info](./piggySC5.png)
+![image info](./screenshots/piggySC5.png)
 ---
 
-## How do I set up the project ? :point_down:
+## Back Office :package:
+- See all pots
+![image info](./screenshots/piggyBOSC.png)
+
+- See one pot in details
+![image info](./screenshots/piggyBOSC2.png)
+
+- See every operations
+![image info](./screenshots/piggyBOSC3.png)
+
+## Stack :wrench:
+- Symfony 5.4
+- EasyAdmin
+- Lexik (JWT)
+- Nelmio (CORS)
+
+## Install :hammer:
 
  :bulb: Clone the repository & run
 
@@ -93,12 +109,3 @@ In order to run your application, you need to make sure that you have the follow
 
 * intl
 * openssl
-
-<details close>
-
-<summary> :rocket: Now, you must be like... :rocket:</summary>
-
-
-![Alt Text](https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif)
-
-</details>
