@@ -1,11 +1,23 @@
-## :pig: My Piggy Bank
+# My Piggy Bank :pig: :dollar:
 
-My Piggy Bank has been created for those who are struggling saving up and those who are willing to save up for some reason.
-It's been built by 5 friends and still improving.
+My Piggy Bank is a simple, fast and fun way to save your money. The site is based on the principle of the good old piggy bank, but online, with electronic payment methods. Once you have registered, all you have to do is create your first pot, give it a name and define the goals you want to reach before withdrawing your savings.
+For more informations, you can see our demo on Youtube here:
 
+[Link to presentation](https://youtu.be/1bJ_6vi__1s?t=2458)
+
+- View as visitor
+![image info](./piggySC.png)
+- Register form
+![image info](./piggySC2.png)
+- Create a new pot
+![image info](./piggySC3.png)
+- See all our pots
+![image info](./piggySC4.png)
+- Make operations on a pot
+![image info](./piggySC5.png)
 ---
 
-### How do I set up the project ? :point_down:
+## How do I set up the project ? :point_down:
 
  :bulb: Clone the repository & run
 
