@@ -1,10 +1,12 @@
 # My Piggy Bank :pig: :dollar:
 
+## The website :computer:
 My Piggy Bank is a simple, fast and fun way to save your money. The site is based on the principle of the good old piggy bank, but online, with electronic payment methods. Once you have registered, all you have to do is create your first pot, give it a name and define the goals you want to reach before withdrawing your savings.
 For more informations, you can see our demo on Youtube here:
 
-[Link to presentation](https://youtu.be/1bJ_6vi__1s?t=2458)
+[Link to presentation](https://youtu.be/1bJ_6vi__1s?t=2458) :movie_camera:
 
+[My Piggy Bank](http://my-piggy-bank.surge.sh/) :pig_nose:
 - View as visitor
 ![image info](./piggySC.png)
 - Register form
