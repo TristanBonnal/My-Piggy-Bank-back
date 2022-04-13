@@ -80,7 +80,7 @@ class OperationController extends AbstractController
             return new JsonResponse($e->getMessage(), 400);
         }
 
-        //Vérification des données du formulaire
+        //Vérification des données du formulaire 
         $errors = $validator->validate($newOperation);
         if (count($errors) > 0) {
             $myJsonError = new JsonError(Response::HTTP_UNPROCESSABLE_ENTITY, "Des erreurs de validation ont été trouvées");
