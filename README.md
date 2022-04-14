@@ -6,7 +6,7 @@ For more informations, you can see our demo on Youtube here:
 
 [Link to presentation](https://youtu.be/1bJ_6vi__1s?t=2458) :movie_camera:
 
-[My Piggy Bank](http://my-piggy-bank.surge.sh/) :pig_nose:
+[My Piggy Bank](http://mypiggybank.surge.sh/) :pig_nose:
 - View as visitor
 ![image info](./screenshots/piggySC.png)
 - Register form
